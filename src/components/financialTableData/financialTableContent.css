@@ -1,0 +1,16 @@
+.tableSearch{
+    border-bottom: 1px solid #E6E8F0;
+    width: 25vw;
+    height: 7vh;
+    padding: 0;
+    position: relative;
+    left: 0;
+}
+
+.tableSearch:focus{
+    outline: none;
+    border-bottom: 1px solid #E6E8F0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}

@@ -1,0 +1,27 @@
+.tableSearch{
+    border-bottom: 1px solid #E6E8F0;
+    width: 25vw;
+    height: 7vh;
+    padding: 0;
+    position: relative;
+    left: 0;
+}
+
+.tableSearch:focus{
+    outline: none;
+    border-bottom: 1px solid #E6E8F0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.tableEdit{
+  height: 5vh;
+  width: 6vw;
+  vertical-align: middle;
+  background: #2D3179;
+  box-shadow: 0px 8px 16px rgba(143, 149, 178, 0.15);
+  border-radius: 8px;
+  margin-left: 3vw;
+  color: #ffff;
+}

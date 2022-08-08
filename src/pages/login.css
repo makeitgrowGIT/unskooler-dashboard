@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700&display=swap');
+
+*{
+    /* background-color: white; */
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+  
+  .loginHeroContainer{
+      max-width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+          margin: auto;
+      /* border: 1px solid rgb(0, 0, 0); */
+      border-radius: 8px;
+      display:flex;
+  }
+  
+  .leftContainer {
+    background-color: #FFF2F0;
+    width: 50vw;
+    height: 100vh;
+    position: relative;
+    isolation: isolate;
+  }
+  
+  .rightContainer{
+      position: relative;
+    background-color: white;
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+  
+
+  .leftInnerContainer{
+      height:85vh ;
+      width: 40vw;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+  }
+
+  .unskoolerLogo{
+      height: 15vh;
+      width: 15vw;
+      margin-left: 1.5vw;
+  }
+
+  .loginImage{
+      position: relative;
+      height: 69vh;
+      width: 38vw;
+      margin: auto;
+      background-image: url("../assets/images/loginImage.svg");
+      background-size: cover;
+  }
+
+  .loginImageLogo{
+    position: absolute;
+    height: 69vh;
+    width: 38vw;
+  }
+
+  .loginBox{
+    height: 75vh;
+    width: 38vw;
+    padding-top: 7vh;
+    margin: auto;
+  }
+
+  .gmText{
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.5vw;
+  }
+
+  h2{
+      font-size: 2vw;
+      font-family: 'Nunito Sans';
+      font-style: normal;
+      font-weight: 700;
+      /* border: 1px solid red; */
+  }
+
+  .loginText{
+      color:  #E86F29;
+  }
+
+  p{
+    margin: 3px;
+    padding: 0;
+    font-size: 13px;
+  }
+
+  .input_field .inputText{
+      height: 5vh;
+      width: 27vw;
+      border: 1px solid #D8DAE5;
+      border-radius: 5px;
+      padding-left: 20px;
+ }
+
+ form .checkboxText{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4vh;
+ }
+
+ .checkboxText .checkboxContent{
+  display: flex;
+  align-items: center;
+ }
+
+ .checkboxContent input{
+  margin: 0 8px 0 4px;
+  accent-color: rgb(212, 104, 3);
+ }
+
+ form .text{
+    color: grey;
+    font-size: 13px;
+ }
+
+ form a{
+  text-decoration: none;
+ }
+
+ form a:hover{
+  text-decoration: underline;
+ }
+
+ form .button{
+  margin-top: 3vh;
+  height: 7vh;
+  width: 29vw;
+ }
+
+ .button input{
+  height: 7vh;
+  width: 29vw;
+  color: white;
+  background: #2D3179;
+  box-shadow: 0px 8px 16px rgba(143, 149, 178, 0.15);
+  border-radius: 8px;
+  border: none;
+  cursor:  pointer ;;
+ }
+
+ form{
+  width: 30vw;
+}
+ 

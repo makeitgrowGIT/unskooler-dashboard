@@ -1,0 +1,46 @@
+.pageHeadingDiv{
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: space-between;
+}
+.userPageHeading{
+    font-size: 2rem;
+    color: #2D3179;
+    letter-spacing: 2px;
+    margin-left: 2rem;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+
+::-webkit-scrollbar-track {
+    background: #ddd8d8; 
+  }
+
+::-webkit-scrollbar-thumb {
+    background: rgb(134, 134, 134); 
+    border-radius: 10px;
+  }
+
+.userTable{
+    width: 95%;
+    margin: auto;
+    height: 72vh;
+    background: #FFFFFF;
+    box-shadow: 0px 8px 16px rgba(143, 149, 178, 0.15);
+    border-radius: 16px;
+    margin-top: 20px;
+}
+
+.addInstructor{
+  height: 6vh;
+  width: 10vw;
+  vertical-align: middle;
+  background: #2D3179;
+  box-shadow: 0px 4px 16px rgba(0, 73, 198, 0.15);
+  border-radius: 9.64593px;
+  color: #ffff;
+  margin-right: 2vw;
+}
+
