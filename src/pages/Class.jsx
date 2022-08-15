@@ -1,26 +1,24 @@
 import React, { useState } from "react";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import "../pages/class.css";
 
-import CountriesTables from "../components/instructorTableData/instructorTableContent";
-import "./Users.css";
-
-const Instructors = () => {
+const Class = () => {
   const [modal, setmodal] = useState(false);
 
   return (
-    <div>
+    <>
       <div className="pageHeadingDiv">
-        <h2 className="userPageHeading">Manage Instructors</h2>
+        <h2 className="coursesChild">Courses {">"} <span className="coursePath">Class</span></h2>
         <div>
           <Modal size="lg" isOpen={modal} toggle={() => setmodal(!modal)}>
             <ModalHeader toggle={() => setmodal(!modal)}>
-              Add Instructor
+              Add Class
             </ModalHeader>
             <ModalBody>
               <form>
                 <Row>
                   <div>
-                    <label htmlFor="name">First Name</label>
+                    <label htmlFor="name">Class name</label>
                     <input
                       type="text"
                       className="form-control"
@@ -51,16 +49,34 @@ const Instructors = () => {
             </ModalBody>
           </Modal>
           <button className="addInstructor" onClick={() => setmodal(true)}>
-            Add Instructor
+            Add Class
           </button>
         </div>
       </div>
 
-      <div className="userTable">
-        <CountriesTables />
+      <div className="cbseSection">
+        <h2 className="cbse">CBSE</h2>
+            <div className="wrapper">
+                <div className="item">Class V</div>
+                <div className="item">Class VI</div>
+                <div className="item">Class VII</div>
+                <div className="item">Class VIII</div>
+                <div className="item">Class V</div>
+            </div>
       </div>
-    </div>
+
+      <div className="cbseSection , icseSection">
+        <h2 className="cbse">ICSE</h2>
+        <div className="wrapper">
+                <div className="item">Class V</div>
+                <div className="item">Class VI</div>
+                <div className="item">Class VII</div>
+                <div className="item">Class VIII</div>
+                <div className="item">Class V</div>
+            </div>
+      </div>
+    </>
   );
 };
 
-export default Instructors;
+export default Class;

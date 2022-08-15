@@ -10,6 +10,26 @@
         "icon": "bx bx-user-pin"
     },
     {
+        "display_name": "Class",
+        "route": "/class",
+        "icon": "bx bx-user-pin"
+    },
+    {
+        "display_name": "Subject",
+        "route": "/subject",
+        "icon": "bx bx-user-pin"
+    },
+    {
+        "display_name": "Chapter",
+        "route": "/chapter",
+        "icon": "bx bx-user-pin"
+    },
+    {
+        "display_name": "Module",
+        "route": "/Module",
+        "icon": "bx bx-user-pin"
+    },
+    {
         "display_name": "Instructors",
         "route": "/instructors",
         "icon": "bx bx-package"
@@ -23,10 +43,5 @@
         "display_name": "Financials",
         "route": "/financials",
         "icon": "bx bx-bar-chart-alt"
-    },
-    {
-        "display_name": "Settings",
-        "route": "/settings",
-        "icon": "bx bx-list-ol"
     }
 ]
