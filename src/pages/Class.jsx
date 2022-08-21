@@ -1,9 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import "../pages/class.css";
+import { ClassService } from "../services/ClassService";
 
 const Class = () => {
   const [modal, setmodal] = useState(false);
+  const classService = new ClassService();
+  const [icseClasses, seticseClasses] = useState([]);
+  const [cbseClasses, setcbseClasses] = useState([]);
+
+  function loadICSEClasses() {
+    classService.getClassByBoardID("ICSE").then((docs) => {
+      seticseClasses(docs);
+    });
+  }
+
+  function loadCBSEClasses() {
+    classService.getClassByBoardID("CBSE").then((docs) => {
+      setcbseClasses(docs);
+    });
+  }
+
+  useEffect(() => {
+    loadICSEClasses()
+    loadCBSEClasses()
+  }, [])
+
 
   return (
     <>
@@ -56,24 +78,16 @@ const Class = () => {
 
       <div className="cbseSection">
         <h2 className="cbse">CBSE</h2>
-            <div className="wrapper">
-                <div className="item">Class V</div>
-                <div className="item">Class VI</div>
-                <div className="item">Class VII</div>
-                <div className="item">Class VIII</div>
-                <div className="item">Class V</div>
-            </div>
+        <div className="wrapper">
+          {cbseClasses.map(cl => { return <div className="item">{cl.name}</div> })}
+        </div>
       </div>
 
       <div className="cbseSection , icseSection">
         <h2 className="cbse">ICSE</h2>
         <div className="wrapper">
-                <div className="item">Class V</div>
-                <div className="item">Class VI</div>
-                <div className="item">Class VII</div>
-                <div className="item">Class VIII</div>
-                <div className="item">Class V</div>
-            </div>
+          {icseClasses.map(cl => { return <div className="item">{cl.name}</div> })}
+        </div>
       </div>
     </>
   );

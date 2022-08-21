@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import '../pages/module.css'
+import { ModuleService } from "../services/ModuleService";
 
 const Module = () => {
   const [modal, setmodal] = useState(false);
+  const [modules, setmodules] = useState([]);
+  const moduleService = new ModuleService();
+
+useEffect(() => {
+  loadModules()
+}, [])
+
+
+  function loadModules(){
+    moduleService.getAllModules().then((mds)=>{
+      setmodules(mds)
+    })
+  }
   return (
     <>
     <div className="pageHeadingDiv">
@@ -54,30 +68,15 @@ const Module = () => {
     </div>
 
     <div className="subjectColumn">
-              <div className="item">
+      {modules.map((md)=>{
+      return <div className="item">
                   <div className="chapterNameMargin">
-                    <h7 className="chaptername">Module Name</h7>
+                    <h7 className="chaptername">{md.name}</h7><br/>
+                    <h7 className="chaptername">{md.durationInSeconds} Sec</h7>
                   </div>
-                <div className="subjectbgImg1"></div>
+                  <div className="subjectbgImg1" style={{ backgroundImage: "url(" + md.thumbnailURL + ")" }}></div>
               </div>
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Module Name</h7>
-                  </div>
-                <div className="subjectbgImg2"></div>
-              </div>
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Module Name</h7>
-                  </div>
-                <div className="subjectbgImg3"></div>
-              </div>
-              <div className="item">
-                  <div className="chapterNameMargin">
-                    <h7 className="chaptername">Module Name</h7>
-                  </div>
-                <div className="subjectbgImg4"></div>
-              </div>
+      })}
       </div>
   </>
   )

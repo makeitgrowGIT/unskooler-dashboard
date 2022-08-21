@@ -5,11 +5,6 @@
         "icon": "bx bx-category-alt"
     },
     {
-        "display_name": "Courses",
-        "route": "/courses",
-        "icon": "bx bx-user-pin"
-    },
-    {
         "display_name": "Class",
         "route": "/class",
         "icon": "bx bx-user-pin"

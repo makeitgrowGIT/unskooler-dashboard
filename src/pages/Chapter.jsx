@@ -1,8 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { ChapterService } from "../services/ChapterService";
 
 const Chapter = () => {
   const [modal, setmodal] = useState(false);
+  const [chapters, setchapters] = useState([]);
+  const chapterService = new ChapterService()
+  function loadChapter(){
+    chapterService.getAllChapters().then((chs)=>{
+      setchapters(chs);
+    })
+  }
+
+  useEffect(() => {
+    loadChapter()
+  }, [])
+  
+
   return (
     <>
     <div className="pageHeadingDiv">
@@ -53,57 +67,16 @@ const Chapter = () => {
     </div>
 
     <div className="subjectColumn">
-              <div className="item">
+      {chapters.map((ch)=>{
+             return <div className="item">
                   <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
+                    <h7 className="chaptername">{ch.name}</h7><br/>
+                    <h7 className="chaptername">{ch.moduleIDs.length} Modules</h7>
                   </div>
-                <div className="subjectbgImg1"></div>
+                  <div className="subjectbgImg1" style={{ backgroundImage: "url(" + ch.thumbnailURL + ")" }}></div>
               </div>
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
-                  </div>
-                <div className="subjectbgImg2"></div>
-              </div>
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
-                  </div>
-                <div className="subjectbgImg3"></div>
-              </div>
-              <div className="item">
-                  <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
-                  </div>
-                <div className="subjectbgImg4"></div>
-              </div>
-      </div>
-
-      <div className="subjectColumn">
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
-                  </div>
-                <div className="subjectbgImg5"></div>
-              </div>
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
-                  </div>
-                <div className="subjectbgImg6"></div>
-              </div>
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
-                  </div>
-                <div className="subjectbgImg7"></div>
-              </div>
-              <div className="item">
-              <div className="chapterNameMargin">
-                    <h7 className="chaptername">Subject Name</h7>
-                  </div>
-                <div className="subjectbgImg8"></div>
-              </div>
+      })}
+              
       </div>
   </>
   )
