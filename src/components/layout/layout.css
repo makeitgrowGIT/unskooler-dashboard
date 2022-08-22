@@ -3,7 +3,7 @@
 }
 
 .layout__content {
-    padding-left: var(--sidebar-width);
+    margin-left: var(--sidebar-width);
     background-color: var(--second-bg);
     height: 100vh;
 }
@@ -11,6 +11,7 @@
 .layout__content-main {
     /* padding: 10px; */
     /* padding-top: 10px; */
+    margin-left: 9vw;
     height: 82vh;
     /* border: 1px solid red; */
 }
