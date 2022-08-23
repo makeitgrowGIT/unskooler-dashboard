@@ -29,9 +29,15 @@ export class ClassService {
     }
     public async addSearchTags(classID: string, tags: string[]) {
         try {
-            var doc  =  await this.classDB.doc(classID).update({classIDs: firebase.firestore.FieldValue.arrayUnion(tags)});
+            tags.forEach(tag => {
+                var doc  =  this.classDB.doc(classID).update({searchTags: firebase.firestore.FieldValue.arrayUnion(tag)});
+                console.log("Updaing tags")
+                console.log(doc)
+            });
             return { "success": true, "message": "class added" }
         } catch (error) {
+            console.log("Updaing tags")
+            console.log(error)
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
