@@ -9,13 +9,19 @@ export class SubjectService{
 
     public async  getAllSubjects (){
         var subjects: Array<Subject> =[];
-        console.log("Retrivig Subjects from Db ");
         var snapschots = await this.subjectDB.get();
-        console.log(snapschots.docs);
         snapschots.docs.forEach(element => {
-            console.log(element.data());
             subjects.push(Convert.toSubject(JSON.stringify(element.data())))
         });
         return subjects;
+    }
+
+    public async addNewSumbject(subject: Subject) {
+        try {
+            var doc  =  await this.subjectDB.doc(subject.subjectID).set(subject);
+            return { "success": true, "message": "class added" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
     }
 }

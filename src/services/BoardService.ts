@@ -20,6 +20,6 @@ export class BoardService{
     }
 
     public appendClassIDToBoard(boardID: string, classID:string){
-    this.boardDB.doc(boardID).update({array: firebase.firestore.FieldValue.arrayUnion( classID)})
+    this.boardDB.doc(boardID).update({classIDs: firebase.firestore.FieldValue.arrayUnion(classID)})
     }
 }

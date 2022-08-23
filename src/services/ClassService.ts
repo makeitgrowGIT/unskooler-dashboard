@@ -1,3 +1,4 @@
+import firebase from "firebase/compat";
 import { db } from "../firebaseConfig";
 import { Class } from "../models/Class";
 import { Convert } from "../models/Class";
@@ -26,4 +27,21 @@ export class ClassService {
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
+    public async addSearchTags(classID: string, tags: string[]) {
+        try {
+            var doc  =  await this.classDB.doc(classID).update({classIDs: firebase.firestore.FieldValue.arrayUnion(tags)});
+            return { "success": true, "message": "class added" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
+    }
+    public async addSubjectID(classID: string, SubjectID: string) {
+        try {
+            var doc  =  await this.classDB.doc(classID).update({subjectIDs: firebase.firestore.FieldValue.arrayUnion(SubjectID)});
+            return { "success": true, "message": "class added" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
+    }
+
 }

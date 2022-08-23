@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Convert } from "../models/Subject";
 import '../pages/subject.css'
+import { BoardService } from "../services/BoardService";
+import { ClassService } from "../services/ClassService";
 import { SubjectService } from "../services/SubjectService";
+import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
 
 const Subject = () => {
   const [modal, setmodal] = useState(false);
   const [subjects, setsubjects] = useState([]);
+  const [imageFile, setimageFile] = useState(null);
+  const [subjectName, setsubjectName] = useState("")
+  const [subjectSummary, setsubjectSummary] = useState("")
+  const [subjectThumbnailURl, setsubjectThumbnailURl] = useState("");
+  const [classboardID, setboardID] = useState("CBSE");
+  const [classID, setclassID] = useState("")
+  const [boards, setboards] = useState([])
+  const [classes, setclasses] = useState(new Map())
+  const [loading, setloading] = useState(false)
   const subjectService = new SubjectService();
   function loadSubjects() {
     subjectService.getAllSubjects().then((subs) => {
@@ -15,9 +28,81 @@ const Subject = () => {
 
   useEffect(() => {
     loadSubjects()
+    loadClassesAndBoards()
   }, [])
 
+  const readFilePath = event => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setsubjectThumbnailURl(reader.result)
+      }
+    }
+    if (event.target.files[0].size > 250000) {
+      alert("Image is too big! Must be less Than 250kb");
+      setsubjectThumbnailURl()
+    }
+    else {
+      setimageFile(event.target.files[0])
+      reader.readAsDataURL(event.target.files[0])
+    }
 
+  }
+
+  async function  loadClassesAndBoards(){
+    var boardService = new BoardService();
+    var classService = new ClassService();
+    var temp_boards = await boardService.getAllBoards();
+    var temp_mapping = new Map()
+    for (let index = 0; index < temp_boards.length; index++) {
+      const board = temp_boards[index];
+      var tempC_Claases = await classService.getClassByBoardID(board.boardID)
+      temp_mapping.set(board.boardID,tempC_Claases)
+      
+    }
+    console.log(temp_mapping)
+    setboards(temp_boards)
+    setclasses(temp_mapping)
+  }
+
+  async function addSubject(e){
+    setloading(true)
+    e.preventDefault()
+    //Create ID
+    var subjectID = subjectName.toLowerCase().replace(" ","_").trim()+"_"+classID+"_"+classboardID
+    console.log("Sub ID: "+subjectID)
+    //Create Search tags
+    var searchTags = [...new Set(subjectName.toLowerCase().split(" ").concat(subjectSummary.toLocaleLowerCase().split(" ")))]
+    console.log("Subject Tags: ")
+    console.log(searchTags)
+    //Add Seraach tags to db
+    var classService = new ClassService()
+    await classService.addSearchTags(classID,searchTags)
+    await classService.addSubjectID(classID,subjectID)
+    //Upload Thumbnail
+    var unsService = new UnskoolerHelperService()
+    var responseObj = await unsService.uploadFile(imageFile)
+    if (responseObj.success) {
+      //Create Subject class
+      var SubjectObj = {
+        "chapterIDs": [],
+        "classID":classID,
+        "name":subjectName,
+        "subjectID":subjectID,
+        "summary":subjectSummary,
+        "thumbnailURL":responseObj.object
+      }
+      //Upload Subject
+      subjectService.addNewSumbject(Convert.toSubject(JSON.stringify(SubjectObj))).then(()=>{
+        setloading(false)
+        setmodal(false)
+      })
+    }
+    else{
+        setloading(false)
+        alert(responseObj.message)
+    }
+  }
 
   return (
     <>
@@ -29,7 +114,7 @@ const Subject = () => {
               Add Subject
             </ModalHeader>
             <ModalBody>
-              <form>
+              <form onSubmit={addSubject}>
                 <Row>
                   <div>
                     <label htmlFor="name">Subject name</label>
@@ -37,29 +122,58 @@ const Subject = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter name"
+                      required
+                      onChange={(e)=>{setsubjectName(e.target.value)}}
                     ></input>
                   </div>
 
                   <div>
-                    <label htmlFor="name">Last Name</label>
+                    <label htmlFor="name">Summary</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Enter name"
+                      placeholder="Enter Summary"
+                      required
+                      onChange={(e)=>{setsubjectSummary(e.target.value)}}
                     ></input>
                   </div>
-
                   <div>
-                    <label htmlFor="name">Email Address</label>
+                    <label htmlFor="name">Thumbnail Image</label>
                     <input
-                      type="text"
+                      type="File"
                       className="form-control"
-                      placeholder="Enter name"
+                      placeholder="Enter URL"
+                      required
+                      onChange={readFilePath}
                     ></input>
-                  </div>
-                </Row>
+                  </div><br />
+                  <div>
+                    <label htmlFor="boards">Select Board</label>
+                    <select
+                      type="select"
+                      className="form-control"
+                      required
+                      placeholder="Enter name"
+                      onChange={(e) => { setboardID(e.target.value) }}
+                    >
+                      {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs.length} Courses)</option> })}
+                    </select>
+                  </div><br />
+                  <div>
+                    <label htmlFor="boards">Select Class</label>
+                    <select
+                      type="select"
+                      className="form-control"
+                      required
+                      placeholder="Enter name"
+                      onChange={(e) => { setclassID(e.target.value) }}
+                    >
+                      {classes.size>0? classes.get(classboardID).map((br) => {console.log(classes); return <option value={br.classID} >{br.name}({br.subjectIDs.length} Courses)</option> }):""}
+                    </select>
+                  </div><br />
+                </Row><br/><br/>
+              <button className={loading?"addInstructor-loading":"addInstructor"} type="submit">{loading?<i class='bx bx-loader bx-spin'></i>:"Sumbit"}</button>
               </form>
-              <button className="addInstructor">Submit</button>
             </ModalBody>
           </Modal>
           <button className="addInstructor" onClick={() => setmodal(true)}>
