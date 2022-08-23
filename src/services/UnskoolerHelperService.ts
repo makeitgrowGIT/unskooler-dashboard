@@ -5,6 +5,7 @@ import {uploadBytes, ref } from "firebase/storage";
 export class UnskoolerHelperService{
 
     async uploadFile(file: File ){
+        //This Method will upload given file to fireabse clous storage and return the downloadURL
         try {
             var uploadname = file.name
             var firebaseStorageRef = ref(storage,uploadname)
@@ -15,9 +16,6 @@ export class UnskoolerHelperService{
         } catch (error) {
             return { "success": false, "message": "Unable to add class: " + error }
         }
-
-
-
     }
 
 }
