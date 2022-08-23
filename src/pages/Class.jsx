@@ -156,7 +156,7 @@ const Class = () => {
                     ></input>
                   </div><br />
                 </Row><br />
-                <button className="addInstructor" type="submit" >{loading?"Loading...":"Sumbit"}</button>
+                <button className={loading?"addInstructor-loading":"addInstructor"} type="submit" >{loading?<i class='bx bx-loader bx-spin'></i>:"Sumbit"}</button>
               </form>
             </ModalBody>
           </Modal>

@@ -43,4 +43,14 @@
   color: #ffff;
   margin-right: 2vw;
 }
-
+.addInstructor-loading{
+  height: 6vh;
+  width: 10vw;
+  vertical-align: middle;
+  background: #a6a7c0;
+  box-shadow: 0px 4px 16px rgba(0, 73, 198, 0.15);
+  border-radius: 9.64593px;
+  color: rgb(230, 230, 230);
+  margin-right: 2vw;
+  cursor: not-allowed;
+}
