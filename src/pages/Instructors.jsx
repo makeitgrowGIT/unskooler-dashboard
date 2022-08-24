@@ -1,11 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 
 import CountriesTables from "../components/instructorTableData/instructorTableContent";
+import { InstructorService } from "../services/InstructorService";
 import "./Users.css";
+import DataTable from "react-data-table-component";
+import { Convert } from "../models/Instructor";
 
 const Instructors = () => {
   const [modal, setmodal] = useState(false);
+  const [firstName, setfirstName] = useState("")
+  const [lastName, setlastName] = useState("")
+  const [contactNumber, setcontactNumber] = useState(0)
+  const [loading, setloading] = useState(false)
+  const instService  = new InstructorService()
+  const [instuctorList, setinstuctorList] = useState([])
+
+  async function addInstuctor(e){
+    e.preventDefault()
+    setloading(true)
+    //generateID
+    var id = new Date().getTime().toString()
+    //Create Object
+    var insObj = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "contactNumber": contactNumber,
+      "insructorID":id
+    }
+
+    instService.addNewInstrucor(Convert.toInstrucor(JSON.stringify(insObj))).then((res)=>{
+
+      if (res.success) {
+        var tempList  = instuctorList
+        tempList.push(Convert.toInstrucor(JSON.stringify(insObj)))
+        setinstuctorList(tempList)
+        setloading(false)
+        setmodal(false)
+      } else {
+        alert(res.message)
+        setloading(false)
+        
+      }
+    
+    }
+    )
+  }
+
+  useEffect(() => {
+    instService.getAllInstocors().then((ins)=>{setinstuctorList(ins)})
+  }, [])
+  
+  
+  const columns = [
+    {
+      name: "First Name",
+      selector: (row) => row.firstName,
+     
+    },
+    {
+      name: "last Name",
+      selector: (row) => row.lastName,
+    },
+    {
+      name: "Contact Number",
+      selector: (row) => row.contactNumber,
+    }
+  ];
 
   return (
     <div>
@@ -17,7 +78,7 @@ const Instructors = () => {
               Add Instructor
             </ModalHeader>
             <ModalBody>
-              <form>
+              <form onSubmit={addInstuctor}>
                 <Row>
                   <div>
                     <label htmlFor="name">First Name</label>
@@ -25,6 +86,8 @@ const Instructors = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter name"
+                      onChange={(e)=>{setfirstName(e.target.value)}}
+                      required
                     ></input>
                   </div>
 
@@ -34,20 +97,24 @@ const Instructors = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter name"
+                      onChange={(e)=>{setlastName(e.target.value)}}
+                      required
                     ></input>
                   </div>
 
                   <div>
-                    <label htmlFor="name">Email Address</label>
+                    <label htmlFor="name">Contact Number</label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
-                      placeholder="Enter name"
+                      placeholder="Enter Contect Number"
+                      onChange={(e)=>{setcontactNumber(e.target.value)}}
+                      required
                     ></input>
                   </div>
                 </Row>
+              <button className={loading?"addInstructor-loading":"addInstructor"}   type="submit">{loading?<i class='bx bx-loader bx-spin'></i>:"Sumbit"}</button>
               </form>
-              <button className="addInstructor">Submit</button>
             </ModalBody>
           </Modal>
           <button className="addInstructor" onClick={() => setmodal(true)}>
@@ -57,7 +124,20 @@ const Instructors = () => {
       </div>
 
       <div className="userTable">
-        <CountriesTables />
+        <DataTable 
+  columns={columns} 
+  data={instuctorList}
+  paginationRowsPerPageOptions={[8, 12, 25, 50]}
+  paginationPerPage = {8}
+  pagination 
+  fixedHeader
+  fixedHeaderScrollHeight="300px" 
+  highlightOnHover
+  subHeader
+  subHeaderComponent = {<input type="text" placeholder="Search" className="tableSearch"/>} 
+  subHeaderAlign = "left"
+  selectableRows 
+  />
       </div>
     </div>
   );

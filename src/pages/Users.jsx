@@ -19,6 +19,10 @@ const Customers = () => {
   }, [])
   
   const columns = [
+    // {
+    //     name: "Profile Pic",
+    //     cell: row => <div src={row.profilePicUrl} width="5vw" height="5vw" style={{backgroundImage:'url('+row.profilePicUrl+')', backgroundColor:"red"}}>a</div>
+    // },
     {
       name: "First Name",
       selector: (row) => row.firstname,
