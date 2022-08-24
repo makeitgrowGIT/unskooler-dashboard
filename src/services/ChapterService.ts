@@ -17,4 +17,13 @@ export class ChapterService{
         });
         return chapters;
     }
+
+    public async addNewChapter(chapter: Chapter) {
+        try {
+            var doc  =  await this.chapterDB.doc(chapter.chapterID).set(chapter);
+            return { "success": true, "message": "class added" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
+    }
 }

@@ -19,6 +19,17 @@ export class ClassService {
         return classes;
     }
 
+    public async getAllClasese(){
+        let classes: Array<Class> =[];
+        let snapschots = await this.classDB.get();
+        console.log(snapschots.docs);
+        snapschots.docs.forEach(element => {
+            console.log(element.data());
+            classes.push(Convert.toClass(JSON.stringify(element.data())))
+        });
+        return classes;
+    }
+
     public async addNewClass(grade: Class) {
         try {
             var doc  =  await this.classDB.doc(grade.classID).set(grade);
