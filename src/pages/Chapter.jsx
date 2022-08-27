@@ -1,6 +1,7 @@
 import { async } from "@firebase/util";
 import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Convert } from "../models/Chapter";
 import { BoardService } from "../services/BoardService";
 import { ChapterService } from "../services/ChapterService";
 import { ClassService } from "../services/ClassService";
@@ -58,7 +59,7 @@ const Chapter = () => {
     e.preventDefault()
     setloading(true)
     //Generate id
-    let chapter_id = chapterName.toLocaleLowerCase().replace(" ","_")+"_"+subjectID+"_"+classID+"_"+boardID
+    let chapter_id = chapterName.replace(/ /g,"_").trim().toLocaleLowerCase()+"_"+subjectID+"_"+classID+"_"+boardID
     //add chpaterID to subject
     subjectService.addCphaterID(chapter_id)
     //add create search tags
@@ -72,7 +73,7 @@ const Chapter = () => {
       //create obj
       let chapter = {
         "chapterID":chapter_id,
-        "index":index,
+        "index":Number.parseInt(index),
         "instructorID":instuctorID,
         "moduleIDs": [],
         "name":chapterName,
@@ -81,7 +82,7 @@ const Chapter = () => {
         "thumbnailURL":responseObj.object
       }
       //upload chapter
-      chapterService.addNewChapter(chapter).then(()=>{
+      chapterService.addNewChapter(Convert.toChapter(JSON.stringify(chapter))).then(()=>{
         setloading(false)
       })
     } else {

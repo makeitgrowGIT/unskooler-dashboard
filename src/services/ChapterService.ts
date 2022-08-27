@@ -20,6 +20,7 @@ export class ChapterService{
 
     public async addNewChapter(chapter: Chapter) {
         try {
+            console.table(chapter)
             var doc  =  await this.chapterDB.doc(chapter.chapterID).set(chapter);
             return { "success": true, "message": "class added" }
         } catch (error) {
