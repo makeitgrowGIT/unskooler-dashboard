@@ -9,11 +9,11 @@ export class ClassService {
 
     public async getClassByBoardID(boardID: String) {
         var classes: Array<Class> = [];
-        console.log("Retrivig Classes from Db for: " + boardID);
+        //console.log("Retrivig Classes from Db for: " + boardID);
         var snapschots = await this.classDB.where("boardID", "==", boardID).get();
-        console.log(snapschots.docs);
+        //console.log(snapschots.docs);
         snapschots.docs.forEach(element => {
-            console.log(element.data());
+            //console.log(element.data());
             classes.push(Convert.toClass(JSON.stringify(element.data())))
         });
         return classes;
@@ -22,9 +22,9 @@ export class ClassService {
     public async getAllClasese(){
         let classes: Array<Class> =[];
         let snapschots = await this.classDB.get();
-        console.log(snapschots.docs);
+        //console.log(snapschots.docs);
         snapschots.docs.forEach(element => {
-            console.log(element.data());
+            //console.log(element.data());
             classes.push(Convert.toClass(JSON.stringify(element.data())))
         });
         return classes;
@@ -42,13 +42,13 @@ export class ClassService {
         try {
             tags.forEach(tag => {
                 var doc  =  this.classDB.doc(classID).update({searchTags: firebase.firestore.FieldValue.arrayUnion(tag)});
-                console.log("Updaing tags")
-                console.log(doc)
+                //console.log("Updaing tags")
+                //console.log(doc)
             });
             return { "success": true, "message": "class added" }
         } catch (error) {
-            console.log("Updaing tags")
-            console.log(error)
+            //console.log("Updaing tags")
+            //console.log(error)
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }

@@ -60,7 +60,7 @@ const Subject = () => {
       temp_mapping.set(board.boardID,tempC_Claases)
       
     }
-    console.log(temp_mapping)
+    //console.log(temp_mapping)
     setboards(temp_boards)
     setclasses(temp_mapping)
   }
@@ -70,11 +70,11 @@ const Subject = () => {
     e.preventDefault()
     //Create ID
     var subjectID = subjectName.toLowerCase().replace(" ","_").trim()+"_"+classID+"_"+classboardID
-    console.log("Sub ID: "+subjectID)
+    //console.log("Sub ID: "+subjectID)
     //Create Search tags
     var searchTags = [...new Set(subjectName.toLowerCase().split(" ").concat(subjectSummary.toLocaleLowerCase().split(" ")))]
-    console.log("Subject Tags: ")
-    console.log(searchTags)
+    //console.log("Subject Tags: ")
+    //console.log(searchTags)
     //Add Seraach tags to db
     var classService = new ClassService()
     await classService.addSearchTags(classID,searchTags)
@@ -168,7 +168,7 @@ const Subject = () => {
                       placeholder="Enter name"
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
-                      {classes.size>0? classes.get(classboardID).map((br) => {console.log(classes); return <option value={br.classID} >{br.name}({br.subjectIDs.length} Courses)</option> }):""}
+                      {classes.size>0? classes.get(classboardID).map((br) => { return <option value={br.classID} >{br.name}({br.subjectIDs.length} Courses)</option> }):""}
                     </select>
                   </div><br />
                 </Row><br/><br/>

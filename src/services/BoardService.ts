@@ -9,11 +9,11 @@ export class BoardService{
 
     public async  getAllBoards (){
         var boards: Array<Board> =[];
-        console.log("Retrivig Classes from Db for: ");
+        //console.log("Retrivig Classes from Db for: ");
         var snapschots = await this.boardDB.get();
-        console.log(snapschots.docs);
+        //console.log(snapschots.docs);
         snapschots.docs.forEach(element => {
-            console.log(element.data());
+            //console.log(element.data());
             boards.push(Convert.toBoard(JSON.stringify(element.data())))
         });
         return boards;

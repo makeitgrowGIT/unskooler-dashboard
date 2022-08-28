@@ -8,13 +8,23 @@ export class ModuleService{
 
     public async getAllModules (){
         var modules: Array<Module> =[];
-        console.log("Retrivig Classes from Db for: ");
+        //console.log("Retrivig Classes from Db for: ");
         var snapschots = await this.moduleDb.get();
-        console.log(snapschots.docs);
+        //console.log(snapschots.docs);
         snapschots.docs.forEach(element => {
-            console.log(element.data());
+            //console.log(element.data());
             modules.push(Convert.toModule(JSON.stringify(element.data())))
         });
         return modules;
+    }
+
+    public async addNewModue(module:Module) {
+        try {
+            var doc  =  await this.moduleDb.doc(module.moduleID).set(module);
+            return { "success": true, "message": "class added" }
+        } catch (error) {
+            console.log(error)
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
     }
 }

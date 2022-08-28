@@ -198,7 +198,7 @@ const Chapter = () => {
                     required
                     onChange={(e)=>{setsubjecID(e.target.value)}}
                   >
-                    {subjects.filter((curVal,val,index)=>{console.log(curVal); return curVal.classID === classID}).map((_ins)=>{return <option value={_ins.subjectID}>{_ins.name}</option>})}
+                    {subjects.filter((curVal,val,index)=>{ return curVal.classID === classID}).map((_ins)=>{return <option value={_ins.subjectID}>{_ins.name}</option>})}
                   </select>
                 </div>
 

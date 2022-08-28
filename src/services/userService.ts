@@ -8,11 +8,11 @@ export class UserService{
 
     public async  getAllUser (){
         var users: Array<User> =[];
-        console.log("Retrivig Subjects from Db ");
+        //console.log("Retrivig Subjects from Db ");
         var snapschots = await this.userDb.get();
-        console.log(snapschots.docs);
+        //console.log(snapschots.docs);
         snapschots.docs.forEach(element => {
-            console.log(element.data());
+            //console.log(element.data());
             users.push(Convert.toUser(JSON.stringify(element.data())))
         });
         return users;

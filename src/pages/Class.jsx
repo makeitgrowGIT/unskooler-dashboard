@@ -44,11 +44,11 @@ const Class = () => {
     boardService.appendClassIDToBoard(boardID,class_id)
     //Get Firebase URL: 
     var unsService = new UnskoolerHelperService()
-    console.log("FileName")
-    console.log(imageFile.name)
+    //console.log("FileName")
+    //console.log(imageFile.name)
     var responseObj = await unsService.uploadFile(imageFile)
-    console.log("responseObj")
-    console.log(responseObj)
+    //console.log("responseObj")
+    //console.log(responseObj)
     if (responseObj.success) {
       //create search tags:
       var searchTags = className.toLocaleLowerCase().split(" ")
