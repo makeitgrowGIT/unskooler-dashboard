@@ -1,5 +1,6 @@
 body{
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .coursePath{
@@ -34,25 +35,18 @@ body{
 
 .wrapper{
     min-width: 100vw;
-    max-height: 25vh;
     display: flex;
     margin-left: 2rem;
 }
 
 .wrapper .item{
-    min-width: 15vw;
-    height: 23vh;
-    line-height: 23vh;
-    text-align: center;
-    background-color: aquamarine;
-    margin-right: 2rem;
-    background: #D6D0FF;
+    width: 17vw;
+    padding: 1vw;
+    margin: 1vh;
+    height: 33vh;
+    background: #FAFBFF;
     box-shadow: 0px 8px 16px rgba(143, 149, 178, 0.15);
     border-radius: 16px;
-    font-family: 'Nunito Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1.5rem;
     color: #2D3179;
 }
 

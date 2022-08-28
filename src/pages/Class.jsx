@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Rating from "react-rating";
 import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import { Convert } from "../models/Class";
 import "../pages/class.css";
@@ -40,8 +41,8 @@ const Class = () => {
     e.preventDefault()
     setloading(true)
     //Generate Class ID
-    var class_id = className.replace(" ","_").toLocaleLowerCase() + "_" + boardID.toString().toLocaleLowerCase()
-    boardService.appendClassIDToBoard(boardID,class_id)
+    var class_id = className.replace(" ", "_").toLocaleLowerCase() + "_" + boardID.toString().toLocaleLowerCase()
+    boardService.appendClassIDToBoard(boardID, class_id)
     //Get Firebase URL: 
     var unsService = new UnskoolerHelperService()
     //console.log("FileName")
@@ -63,11 +64,11 @@ const Class = () => {
         "price": Number.parseFloat(classPrice),
         "rating": 5,
         "subjectIDs": [],
-        "searchTags":searchTags,
-        "thumbnailUrl":responseObj.object
-    }
+        "searchTags": searchTags,
+        "thumbnailUrl": responseObj.object
+      }
       //Add Class
-      classService.addNewClass(Convert.toClass(JSON.stringify(classObj))).then(()=>{
+      classService.addNewClass(Convert.toClass(JSON.stringify(classObj))).then(() => {
         setloading(false)
         setmodal(false)
       })
@@ -157,7 +158,7 @@ const Class = () => {
                     ></input>
                   </div><br />
                 </Row><br />
-                <button className={loading?"addInstructor-loading":"addInstructor"} type="submit" >{loading?<i class='bx bx-loader bx-spin'></i>:"Sumbit"}</button>
+                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit" >{loading ? <i class='bx bx-loader bx-spin'></i> : "Sumbit"}</button>
               </form>
             </ModalBody>
           </Modal>
@@ -168,16 +169,87 @@ const Class = () => {
       </div>
 
       <div className="cbseSection">
-        <h2 className="cbse">CBSE</h2>
+        <h2 className="cbse"></h2>
         <div className="wrapper">
-          {cbseClasses.map(cl => { return <div className="item">{cl.name}</div> })}
+          {cbseClasses.map(cl => {
+            return <div className="item">
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around"  }}>
+                <div className="chapterNameMargin">
+                  <h7>{cl.boardID}</h7>
+                </div>
+                <i class='bx bxs-edit'></i>
+              </div>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h5>{cl.name}</h5>
+                </div>
+                <div className="chapterNameMargin">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" defaultChecked={cl.featured} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                  </div>
+                </div>
+              </div>
+              <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
+              <br/>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  ₹{cl.price}
+                </div>
+                <div className="chapterNameMargin">
+                  <Rating initialRating={cl.rating}
+                    readonly
+                    emptySymbol="bx bx-star"
+                    fullSymbol="bx bxs-star"
+                    fractions={2}
+
+                  />
+                </div>
+              </div>
+            </div>
+          })}
         </div>
       </div>
+      <br/>
+      <br/>
 
       <div className="cbseSection , icseSection">
-        <h2 className="cbse">ICSE</h2>
+        <h2 className="cbse"></h2>
         <div className="wrapper">
-          {icseClasses.map(cl => { return <div className="item">{cl.name}</div> })}
+          {icseClasses.map(cl => {
+            return <div className="item">
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around"  }}>
+                <div className="chapterNameMargin">
+                  <h7>{cl.boardID}</h7>
+                </div>
+                <i class='bx bxs-edit'></i>
+              </div>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h5>{cl.name}</h5>
+                </div>
+                <div className="chapterNameMargin">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" defaultChecked={cl.featured} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                  </div>
+                </div>
+              </div>
+              <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
+              <br/>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  ₹{cl.price}
+                </div>
+                <div className="chapterNameMargin">
+                  <Rating initialRating={cl.rating}
+                    readonly
+                    emptySymbol="bx bx-star"
+                    fullSymbol="bx bxs-star"
+                    fractions={2}
+                  />
+                </div>
+              </div>
+            </div>
+          })}
         </div>
       </div>
     </>
