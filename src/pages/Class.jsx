@@ -144,6 +144,7 @@ const Class = () => {
                       required
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
+                      <option>Select Board</option>
                       {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs.length} Courses)</option> })}
                     </select>
                   </div><br />

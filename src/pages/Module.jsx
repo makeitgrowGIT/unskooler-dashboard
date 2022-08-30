@@ -201,6 +201,7 @@ const Module = () => {
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
+                    <option>Select Board</option>
                       {boards.map((_ins) => { return <option value={_ins.boardID}>{_ins.name}</option> })}
                     </select>
                   </div>
@@ -213,6 +214,7 @@ const Module = () => {
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
+                    <option>Select Class</option>
                       {classes.filter((curVal, val, index) => { return curVal.boardID === boardID }).map((_ins) => { return <option value={_ins.classID}>{_ins.name}</option> })}
                     </select>
                   </div>
@@ -226,6 +228,7 @@ const Module = () => {
                       required
                       onChange={(e) => { setsubjecID(e.target.value) }}
                     >
+                      <option>Select Subject</option>
                       {subjects.filter((curVal, val, index) => { return curVal.classID === classID }).map((_ins) => { return <option value={_ins.subjectID}>{_ins.name}</option> })}
                     </select>
                   </div>

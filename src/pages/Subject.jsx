@@ -156,6 +156,7 @@ const Subject = () => {
                       placeholder="Enter name"
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
+                    <option>Select Board</option>
                       {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs.length} Courses)</option> })}
                     </select>
                   </div><br />
@@ -168,6 +169,7 @@ const Subject = () => {
                       placeholder="Enter name"
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
+                    <option>Select Class</option>
                       {classes.size>0? classes.get(classboardID).map((br) => { return <option value={br.classID} >{br.name}({br.subjectIDs.length} Courses)</option> }):""}
                     </select>
                   </div><br />
