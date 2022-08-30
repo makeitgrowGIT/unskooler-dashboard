@@ -65,6 +65,7 @@ const Class = () => {
         "rating": 5,
         "subjectIDs": [],
         "searchTags": searchTags,
+        "isFeatured ":false,
         "thumbnailUrl": responseObj.object
       }
       //Add Class
