@@ -5,12 +5,14 @@ import { Convert } from "../models/Class";
 import "../pages/class.css";
 import { BoardService } from "../services/BoardService";
 import { ClassService } from "../services/ClassService";
+import { FeaturedService } from "../services/FeaturedService";
 import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
 
 const Class = () => {
   const [modal, setmodal] = useState(false);
   const classService = new ClassService();
   const boardService = new BoardService();
+  const featuredService = new FeaturedService();
   const [icseClasses, seticseClasses] = useState([]);
   const [cbseClasses, setcbseClasses] = useState([]);
   const [className, setclassName] = useState("");
@@ -20,7 +22,8 @@ const Class = () => {
   const [boardID, setboardID] = useState("CBSE");
   const [boards, setboards] = useState([]);
   const [loading, setloading] = useState(false)
-  let mode = "sumbit"
+  const [mode, setmode] = useState("submit")
+  const [updateClassObj, setupdateClassObj] = useState(null)
 
   function loadICSEClasses() {
     classService.getClassByBoardID("ICSE").then((docs) => {
@@ -66,11 +69,14 @@ const Class = () => {
         "rating": 5,
         "subjectIDs": [],
         "searchTags": searchTags,
-        "isFeatured ":false,
+        "isFeatured ": false,
         "thumbnailUrl": responseObj.object
       }
       //Add Class
       classService.addNewClass(Convert.toClass(JSON.stringify(classObj))).then(() => {
+        loadICSEClasses()
+        loadBoards()
+        loadCBSEClasses()
         setloading(false)
         setmodal(false)
       })
@@ -80,6 +86,35 @@ const Class = () => {
 
   }
 
+  async function updateClass(e) {
+    e.preventDefault()
+    setloading(true)
+    var classObj = {
+      "boardID": boardID,
+      "name": className,
+      "price": Number.parseFloat(classPrice)
+    }
+    classService.updateClass(updateClassObj.classID, classObj).then((res) => {
+      if (res.success) {
+
+        loadICSEClasses()
+        loadBoards()
+        loadCBSEClasses()
+        setloading(false)
+        setmodal(false)
+
+      }
+    })
+  }
+
+  function submitForm(e) {
+    if (mode == "sumbit") {
+      addClass(e)
+    }
+    else {
+      updateClass(e)
+    }
+  }
   useEffect(() => {
     loadICSEClasses()
     loadBoards()
@@ -104,7 +139,27 @@ const Class = () => {
     }
 
   }
+  function updateFeatured(classID, value){
+    console.log(value)
+    if (value) {
+      //If Value Tru
+        //Update class with feature false
+        classService.updateClass(classID,{featured:true}).then(()=>{
+          //Add new Featured
+          featuredService.addClassToFeature(classID)
+        })
+      //else
+    } else {
+      //Update class with feature true
+      classService.updateClass(classID,{featured:false}).then(()=>{
+        //Add new Featured
+        featuredService.removeClassToFeature(classID)
+      })
+      //remove Featured
+    }
 
+
+  }
   return (
     <>
       <div className="pageHeadingDiv">
@@ -115,7 +170,7 @@ const Class = () => {
               Add Classes
             </ModalHeader>
             <ModalBody>
-              <form onSubmit={addClass}>
+              <form onSubmit={submitForm}>
                 <Row>
                   <div>
                     <label htmlFor="name">Class name</label>
@@ -124,6 +179,7 @@ const Class = () => {
                       required
                       className="form-control"
                       placeholder="Enter name"
+                      defaultValue={className}
                       onChange={(e) => { setclassName(e.target.value) }}
                     ></input>
                   </div><br />
@@ -134,6 +190,7 @@ const Class = () => {
                       className="form-control"
                       placeholder="Enter price"
                       required
+                      defaultValue={classPrice}
                       onChange={(e) => { setclassPrice(e.target.value) }}
                     ></input>
                   </div><br />
@@ -144,28 +201,31 @@ const Class = () => {
                       className="form-control"
                       placeholder="Enter name"
                       required
+                      defaultValue={boardID}
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
                       <option>Select Board</option>
                       {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs.length} Courses)</option> })}
                     </select>
                   </div><br />
-                  <div>
+                  {mode == "submit" ? <div>
                     <label htmlFor="name">Thumbnail Image</label>
                     <input
                       type="File"
                       className="form-control"
                       placeholder="Enter URL"
                       required
+                      accept="image/png, image/gif, image/jpeg"
+                      defaultValue={imageFile}
                       onChange={readFilePath}
                     ></input>
-                  </div><br />
+                  </div> : <br />}
                 </Row><br />
-                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit" >{loading ? <i class='bx bx-loader bx-spin'></i> : "Sumbit"}</button>
+                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit" >{loading ? <i class='bx bx-loader bx-spin'></i> : mode == "submit" ? "Sumbit" : "Update"}</button>
               </form>
             </ModalBody>
           </Modal>
-          <button className="addInstructor" onClick={() => setmodal(true)}>
+          <button className="addInstructor" onClick={() => { setmode("submit"); setmodal(true) }}>
             Add Class
           </button>
         </div>
@@ -176,11 +236,18 @@ const Class = () => {
         <div className="wrapper">
           {cbseClasses.map(cl => {
             return <div className="item">
-              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around"  }}>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
                   <h7>{cl.boardID}</h7>
                 </div>
-                <i class='bx bxs-edit' onClick={()=>{setmodal(true)}}></i>
+                <i class='bx bxs-edit' onClick={async () => {
+                  setmode("update");
+                  setclassName(cl.name)
+                  setclassPrice(cl.price)
+                  setboardID(cl.boardID)
+                  setupdateClassObj(cl)
+                  setmodal(true);
+                }} style={{ cursor: "pointer" }}></i>
               </div>
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
@@ -188,12 +255,12 @@ const Class = () => {
                 </div>
                 <div className="chapterNameMargin">
                   <div class="form-check form-switch">
-                    <input class="form-check-input" defaultChecked={cl.featured} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e)=>{updateFeatured(cl.classID,e.target.checked)}} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                   </div>
                 </div>
               </div>
               <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
-              <br/>
+              <br />
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
                   ₹{cl.price}
@@ -212,19 +279,26 @@ const Class = () => {
           })}
         </div>
       </div>
-      <br/>
-      <br/>
+      <br />
+      <br />
 
       <div className="cbseSection , icseSection">
         <h2 className="cbse"></h2>
         <div className="wrapper">
           {icseClasses.map(cl => {
             return <div className="item">
-              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around"  }}>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
                   <h7>{cl.boardID}</h7>
                 </div>
-                <i class='bx bxs-edit'></i>
+                <i class='bx bxs-edit' onClick={async () => {
+                  setmode("update");
+                  setclassName(cl.name)
+                  setclassPrice(cl.price)
+                  setboardID(cl.boardID)
+                  setupdateClassObj(cl)
+                  setmodal(true);
+                }} style={{ cursor: "pointer" }}></i>
               </div>
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
@@ -232,12 +306,12 @@ const Class = () => {
                 </div>
                 <div className="chapterNameMargin">
                   <div class="form-check form-switch">
-                    <input class="form-check-input" defaultChecked={cl.featured} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e)=>{updateFeatured(cl.classID,e.target.checked)}} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                   </div>
                 </div>
               </div>
               <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
-              <br/>
+              <br />
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
                   ₹{cl.price}

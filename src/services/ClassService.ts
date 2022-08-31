@@ -61,4 +61,13 @@ export class ClassService {
         }
     }
 
+    public async updateClass(classID: string, graded: Class){
+        try {
+            await this.classDB.doc(classID).update(graded)
+            return { "success": true, "message": "class Updated" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
+    }
+
 }
