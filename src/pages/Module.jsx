@@ -168,7 +168,7 @@ const Module = () => {
         <div>
           <Modal size="lg" isOpen={modal} toggle={() => setmodal(!modal)}>
             <ModalHeader toggle={() => setmodal(!modal)}>
-              Add Chapter
+              Add Module
             </ModalHeader>
             <ModalBody>
               <form onSubmit={addModule}>
@@ -287,7 +287,7 @@ const Module = () => {
             </ModalBody>
           </Modal>
           <button className="addInstructor" onClick={() => setmodal(true)}>
-            Add Chapter
+            Add Module
           </button>
         </div>
       </div>

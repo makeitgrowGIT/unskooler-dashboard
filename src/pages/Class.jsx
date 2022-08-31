@@ -20,6 +20,7 @@ const Class = () => {
   const [boardID, setboardID] = useState("CBSE");
   const [boards, setboards] = useState([]);
   const [loading, setloading] = useState(false)
+  let mode = "sumbit"
 
   function loadICSEClasses() {
     classService.getClassByBoardID("ICSE").then((docs) => {
@@ -179,7 +180,7 @@ const Class = () => {
                 <div className="chapterNameMargin">
                   <h7>{cl.boardID}</h7>
                 </div>
-                <i class='bx bxs-edit'></i>
+                <i class='bx bxs-edit' onClick={()=>{setmodal(true)}}></i>
               </div>
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
