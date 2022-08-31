@@ -36,8 +36,10 @@ function Login() {
     let result  =  await loginService.verifyAdmin(username,password);
     console.log(result)
     if (result) {
-      localStorage.setItem("username",username)
-      localStorage.setItem("loggedIn",true)
+      if (remember) {
+        localStorage.setItem("username",username)
+        localStorage.setItem("loggedIn",true)
+      }
       window.location.href='/dashboard'
     } else {
       alert("Wrong password")
