@@ -7,6 +7,7 @@ import './sidebar.css'
 import logo from '../../assets/images/logo.svg'
 
 import sidebar_items from '../../assets/JsonData/sidebar_routes.json'
+import howToFile from "../../assets/HowTo.txt"
 
 const SidebarItem = props => {
 
@@ -30,8 +31,8 @@ const Sidebar = props => {
 
     return (
         <div className='sidebar'>
-            <div className="sidebar__logo">
-                <img src={logo} alt="company logo" />
+            <div className="sidebar__logo"  style={{cursor:"pointer"}} href={ howToFile} target="_blank" download>
+                <img src={logo} alt="company logo"/>
             </div>
             {
                 sidebar_items.map((item, index) => (
@@ -44,6 +45,11 @@ const Sidebar = props => {
                     </Link>
                 ))
             }
+            <Link className="sidebar__logo"  style={{cursor:"pointer"}} to={ howToFile} target="_blank" download>
+            <SidebarItem
+                            title="Guide"
+                        />
+            </Link>
         </div>
     )
 }

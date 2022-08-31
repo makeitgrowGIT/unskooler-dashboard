@@ -1,0 +1,14 @@
+How to Upload Contain
+    Step 1: Add Class In calss menu
+    Step 2: Add Subject for the calss
+    Step 3: Add Chapter for Subject
+    Step 4: Add Modules for Eaach Chapter
+
+How To Add Class in Featured Section
+    Step 1: Go to class Section
+    Step 2: toggole the switch uppper righ corner in class card
+
+
+Versions:
+|Version		|Date			|
+|v1.0.0		|1-09-2022		|
