@@ -49,7 +49,7 @@ const Subject = () => {
 
   }
 
-  async function  loadClassesAndBoards(){
+  async function loadClassesAndBoards() {
     var boardService = new BoardService();
     var classService = new ClassService();
     var temp_boards = await boardService.getAllBoards();
@@ -57,19 +57,19 @@ const Subject = () => {
     for (let index = 0; index < temp_boards.length; index++) {
       const board = temp_boards[index];
       var tempC_Claases = await classService.getClassByBoardID(board.boardID)
-      temp_mapping.set(board.boardID,tempC_Claases)
-      
+      temp_mapping.set(board.boardID, tempC_Claases)
+
     }
     //console.log(temp_mapping)
     setboards(temp_boards)
     setclasses(temp_mapping)
   }
 
-  async function addSubject(e){
+  async function addSubject(e) {
     setloading(true)
     e.preventDefault()
     //Create ID
-    var subjectID = subjectName.toLowerCase().replace(" ","_").trim()+"_"+classID+"_"+classboardID
+    var subjectID = subjectName.toLowerCase().replace(" ", "_").trim() + "_" + classID + "_" + classboardID
     //console.log("Sub ID: "+subjectID)
     //Create Search tags
     var searchTags = [...new Set(subjectName.toLowerCase().split(" ").concat(subjectSummary.toLocaleLowerCase().split(" ")))]
@@ -77,8 +77,8 @@ const Subject = () => {
     //console.log(searchTags)
     //Add Seraach tags to db
     var classService = new ClassService()
-    await classService.addSearchTags(classID,searchTags)
-    await classService.addSubjectID(classID,subjectID)
+    await classService.addSearchTags(classID, searchTags)
+    await classService.addSubjectID(classID, subjectID)
     //Upload Thumbnail
     var unsService = new UnskoolerHelperService()
     var responseObj = await unsService.uploadFile(imageFile)
@@ -86,21 +86,23 @@ const Subject = () => {
       //Create Subject class
       var SubjectObj = {
         "chapterIDs": [],
-        "classID":classID,
-        "name":subjectName,
-        "subjectID":subjectID,
-        "summary":subjectSummary,
-        "thumbnailURL":responseObj.object
+        "classID": classID,
+        "name": subjectName,
+        "subjectID": subjectID,
+        "summary": subjectSummary,
+        "thumbnailURL": responseObj.object
       }
       //Upload Subject
-      subjectService.addNewSumbject(Convert.toSubject(JSON.stringify(SubjectObj))).then(()=>{
+      subjectService.addNewSumbject(Convert.toSubject(JSON.stringify(SubjectObj))).then(() => {
+
+        loadSubjects()
         setloading(false)
         setmodal(false)
       })
     }
-    else{
-        setloading(false)
-        alert(responseObj.message)
+    else {
+      setloading(false)
+      alert(responseObj.message)
     }
   }
 
@@ -123,7 +125,7 @@ const Subject = () => {
                       className="form-control"
                       placeholder="Enter name"
                       required
-                      onChange={(e)=>{setsubjectName(e.target.value)}}
+                      onChange={(e) => { setsubjectName(e.target.value) }}
                     ></input>
                   </div>
 
@@ -134,7 +136,7 @@ const Subject = () => {
                       className="form-control"
                       placeholder="Enter Summary"
                       required
-                      onChange={(e)=>{setsubjectSummary(e.target.value)}}
+                      onChange={(e) => { setsubjectSummary(e.target.value) }}
                     ></input>
                   </div>
                   <div>
@@ -156,7 +158,7 @@ const Subject = () => {
                       placeholder="Enter name"
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
-                    <option>Select Board</option>
+                      <option>Select Board</option>
                       {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs.length} Courses)</option> })}
                     </select>
                   </div><br />
@@ -169,12 +171,12 @@ const Subject = () => {
                       placeholder="Enter name"
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
-                    <option>Select Class</option>
-                      {classes.size>0? classes.get(classboardID).map((br) => { return <option value={br.classID} >{br.name}({br.subjectIDs.length} Courses)</option> }):""}
+                      <option>Select Class</option>
+                      {classes.size > 0 ? classes.get(classboardID).map((br) => { return <option value={br.classID} >{br.name}({br.subjectIDs.length} Courses)</option> }) : ""}
                     </select>
                   </div><br />
-                </Row><br/><br/>
-              <button className={loading?"addInstructor-loading":"addInstructor"} type="submit">{loading?<i class='bx bx-loader bx-spin'></i>:"Sumbit"}</button>
+                </Row><br /><br />
+                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? <i class='bx bx-loader bx-spin'></i> : "Sumbit"}</button>
               </form>
             </ModalBody>
           </Modal>
@@ -190,10 +192,10 @@ const Subject = () => {
             <div className="chapterNameMargin">
               <h7 className="chaptername">{sub.name}</h7>
             </div>
-            <div className="chapterNameMargin" style={{marginBottom:'0px', fontSize: "0.5rem" }}>
+            <div className="chapterNameMargin" style={{ marginBottom: '0px', fontSize: "0.5rem" }}>
               <h7 className="chaptername">{sub.summary}</h7>
             </div>
-            <div className="chapterNameMargin" style={{marginBottom:'0px'}}>
+            <div className="chapterNameMargin" style={{ marginBottom: '0px' }}>
               <h7 className="chaptername">{sub.chapterIDs.length} Chapters</h7>
             </div>
             <div className="subjectbgImg1" style={{ backgroundImage: "url(" + sub.thumbnailURL + ")" }}></div>

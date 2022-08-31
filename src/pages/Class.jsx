@@ -108,10 +108,12 @@ const Class = () => {
   }
 
   function submitForm(e) {
-    if (mode == "sumbit") {
+    if (mode == "submit") {
+      console.log("Submitting")
       addClass(e)
     }
     else {
+      console.log("Updating")
       updateClass(e)
     }
   }
@@ -205,7 +207,7 @@ const Class = () => {
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
                       <option>Select Board</option>
-                      {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs.length} Courses)</option> })}
+                      {boards.map((br) => { return <option value={br.boardID} >{br.name}</option> })}
                     </select>
                   </div><br />
                   {mode == "submit" ? <div>
@@ -282,7 +284,7 @@ const Class = () => {
       <br />
       <br />
 
-      <div className="cbseSection , icseSection">
+      <div className="cbseSection">
         <h2 className="cbse"></h2>
         <div className="wrapper">
           {icseClasses.map(cl => {

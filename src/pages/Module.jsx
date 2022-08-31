@@ -80,19 +80,19 @@ const Module = () => {
     let searcgTags = moduleName.toLocaleLowerCase().split(" ")
     //Add search tags
     await classService.addSearchTags(searcgTags)
-    await chapterService.addModuleID(chapterID,module_id)
+    await chapterService.addModuleID(chapterID, module_id)
     //Upload thumbnail
     setloadingMessage("Uploading Thumbnail...")
     let thmbURL = await unskService.uploadFile(imageFile)
     //Upload pdf with %
-    let pdfURLA =""
+    let pdfURLA = ""
     if (pdfFile) {
       setloadingMessage("Uploading Pdf...")
       pdfURLA = await unskService.uploadFile(pdfFile)
       if (pdfURLA.success) {
         pdfURLA = pdfURLA.object
       }
-      else{
+      else {
         alert(pdfURLA.message)
       }
     }
@@ -114,21 +114,21 @@ const Module = () => {
       setvideoDuration(duration)
     }
     video.src = URL.createObjectURL(videoFile);
-    
 
 
-    unskService.uploadFileWithPercent(videoFile,setloadingMessage,setvideoURL,(err)=>{alert(err)},()=>{
+
+    unskService.uploadFileWithPercent(videoFile, setloadingMessage, setvideoURL, (err) => { alert(err) }, () => {
       setloadingMessage("uploading...")
       console.log(videoDuration)
-      if (chapterID.length<2){
+      if (chapterID.length < 2) {
         console.log("Empty value")
         console.log(chapters.filter((curVal, val, index) => { return curVal.subjectID === subjecID })[0].chapterID)
-       setchapterID(chapters.filter((curVal, val, index) => { return curVal.subjectID === subjecID })[0].chapterID)
+        setchapterID(chapters.filter((curVal, val, index) => { return curVal.subjectID === subjecID })[0].chapterID)
       }
       //create moduleObj
-      const moduleObj={
+      const moduleObj = {
         "chapterId": chapterID,
-        "durationInSeconds":  Number.parseInt(duration),
+        "durationInSeconds": Number.parseInt(duration),
         "index": Number.parseInt(moduleIndex),
         "isFree": false,
         "moduleID": module_id,
@@ -136,10 +136,12 @@ const Module = () => {
         "thumbnailURL": thmbURL.object,
         "pdfUrl": pdfURLA,
         "videoURL": videoURL
-      }                    
+      }
       console.log(moduleObj)
       //Upload ModuleObj
-      moduleService.addNewModue(moduleObj).then(()=>{
+      moduleService.addNewModue(moduleObj).then(() => {
+
+        initialLoad()
         setloading(false)
         setmodal(false)
       }
@@ -201,7 +203,7 @@ const Module = () => {
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
-                    <option>Select Board</option>
+                      <option>Select Board</option>
                       {boards.map((_ins) => { return <option value={_ins.boardID}>{_ins.name}</option> })}
                     </select>
                   </div>
@@ -214,7 +216,7 @@ const Module = () => {
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
-                    <option>Select Class</option>
+                      <option>Select Class</option>
                       {classes.filter((curVal, val, index) => { return curVal.boardID === boardID }).map((_ins) => { return <option value={_ins.classID}>{_ins.name}</option> })}
                     </select>
                   </div>
@@ -240,7 +242,7 @@ const Module = () => {
                       className="form-control"
                       placeholder="Enter Chapter Summary"
                       required
-                      defaultValue={chapters.length>0? chapters[0].chapterID:""}
+                      defaultValue={chapters.length > 0 ? chapters[0].chapterID : ""}
                       onChange={(e) => { setchapterID(e.target.value) }}
                     >
                       <option>Select Chapter</option>

@@ -1,6 +1,6 @@
 body{
     overflow-y: hidden;
-    overflow-x: hidden;
+    overflow-x: scroll;
 }
 
 .coursePath{
@@ -19,7 +19,8 @@ body{
 .cbseSection{
     margin-top:1rem ;
     height: 30vh;
-    width: 100vw;
+    overflow-x: auto;
+    overflow-y: hidden;
     /* border: 1px solid red; */
 }
 
@@ -34,15 +35,17 @@ body{
 }
 
 .wrapper{
-    min-width: 100vw;
     display: flex;
     margin-left: 2rem;
+    min-width: 80vw;
+    max-width: 80vw;
+    overflow-y: hidden;
 }
 
 .wrapper .item{
     width: 17vw;
     padding: 1vw;
-    margin: 1vh;
+    margin-left: 1vh;
     height: 33vh;
     background: #FAFBFF;
     box-shadow: 0px 8px 16px rgba(143, 149, 178, 0.15);

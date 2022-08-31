@@ -13,10 +13,10 @@ const Instructors = () => {
   const [lastName, setlastName] = useState("")
   const [contactNumber, setcontactNumber] = useState(0)
   const [loading, setloading] = useState(false)
-  const instService  = new InstructorService()
+  const instService = new InstructorService()
   const [instuctorList, setinstuctorList] = useState([])
 
-  async function addInstuctor(e){
+  async function addInstuctor(e) {
     e.preventDefault()
     setloading(true)
     //generateID
@@ -26,37 +26,36 @@ const Instructors = () => {
       "firstName": firstName,
       "lastName": lastName,
       "contactNumber": contactNumber,
-      "insructorID":id
+      "insructorID": id
     }
 
-    instService.addNewInstrucor(Convert.toInstrucor(JSON.stringify(insObj))).then((res)=>{
+    instService.addNewInstrucor(Convert.toInstrucor(JSON.stringify(insObj))).then((res) => {
 
       if (res.success) {
-        var tempList  = instuctorList
-        tempList.push(Convert.toInstrucor(JSON.stringify(insObj)))
-        setinstuctorList(tempList)
+
+        instService.getAllInstocors().then((ins) => { setinstuctorList(ins) })
         setloading(false)
         setmodal(false)
       } else {
         alert(res.message)
         setloading(false)
-        
+
       }
-    
+
     }
     )
   }
 
   useEffect(() => {
-    instService.getAllInstocors().then((ins)=>{setinstuctorList(ins)})
+    instService.getAllInstocors().then((ins) => { setinstuctorList(ins) })
   }, [])
-  
-  
+
+
   const columns = [
     {
       name: "First Name",
       selector: (row) => row.firstName,
-     
+
     },
     {
       name: "last Name",
@@ -86,7 +85,7 @@ const Instructors = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter name"
-                      onChange={(e)=>{setfirstName(e.target.value)}}
+                      onChange={(e) => { setfirstName(e.target.value) }}
                       required
                     ></input>
                   </div>
@@ -97,7 +96,7 @@ const Instructors = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter name"
-                      onChange={(e)=>{setlastName(e.target.value)}}
+                      onChange={(e) => { setlastName(e.target.value) }}
                       required
                     ></input>
                   </div>
@@ -108,12 +107,12 @@ const Instructors = () => {
                       type="number"
                       className="form-control"
                       placeholder="Enter Contect Number"
-                      onChange={(e)=>{setcontactNumber(e.target.value)}}
+                      onChange={(e) => { setcontactNumber(e.target.value) }}
                       required
                     ></input>
                   </div>
                 </Row>
-              <button className={loading?"addInstructor-loading":"addInstructor"}   type="submit">{loading?<i class='bx bx-loader bx-spin'></i>:"Sumbit"}</button>
+                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? <i class='bx bx-loader bx-spin'></i> : "Sumbit"}</button>
               </form>
             </ModalBody>
           </Modal>
@@ -124,20 +123,20 @@ const Instructors = () => {
       </div>
 
       <div className="userTable">
-        <DataTable 
-  columns={columns} 
-  data={instuctorList}
-  paginationRowsPerPageOptions={[8, 12, 25, 50]}
-  paginationPerPage = {8}
-  pagination 
-  fixedHeader
-  fixedHeaderScrollHeight="300px" 
-  highlightOnHover
-  subHeader
-  subHeaderComponent = {<input type="text" placeholder="Search" className="tableSearch"/>} 
-  subHeaderAlign = "left"
-  selectableRows 
-  />
+        <DataTable
+          columns={columns}
+          data={instuctorList}
+          paginationRowsPerPageOptions={[8, 12, 25, 50]}
+          paginationPerPage={8}
+          pagination
+          fixedHeader
+          fixedHeaderScrollHeight="300px"
+          highlightOnHover
+          subHeader
+          subHeaderComponent={<input type="text" placeholder="Search" className="tableSearch" />}
+          subHeaderAlign="left"
+          selectableRows
+        />
       </div>
     </div>
   );
