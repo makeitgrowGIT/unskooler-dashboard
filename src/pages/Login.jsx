@@ -17,7 +17,7 @@ function Login() {
   useEffect(() => {
     let loggedIn = localStorage.getItem("loggedIn")
     if(JSON.parse(loggedIn)){
-      window.location.href='/dashboard'
+      window.location.href='/class'
     }
   }, [])
   
@@ -40,7 +40,7 @@ function Login() {
         localStorage.setItem("username",username)
         localStorage.setItem("loggedIn",true)
       }
-      window.location.href='/dashboard'
+      window.location.href='/class'
     } else {
       alert("Wrong password")
     }

@@ -1,10 +1,5 @@
 [
     {
-        "display_name": "Dashboard",
-        "route": "/dashboard",
-        "icon": "bx bx-category-alt"
-    },
-    {
         "display_name": "Class",
         "route": "/class",
         "icon": "bx bx-user-pin"
@@ -33,10 +28,5 @@
         "display_name": "Users",
         "route": "/users",
         "icon": "bx bx-cart"
-    },
-    {
-        "display_name": "Financials",
-        "route": "/financials",
-        "icon": "bx bx-bar-chart-alt"
     }
 ]
