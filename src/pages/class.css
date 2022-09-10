@@ -1,5 +1,5 @@
 body{
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     overflow-x: scroll;
 }
 
@@ -19,7 +19,7 @@ body{
 .cbseSection{
     margin-top:1rem ;
     overflow-x: auto;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  
     /* border: 1px solid red; */
@@ -43,7 +43,7 @@ body{
     margin-left: 2rem;
     min-width: 80vw;
     max-width: 80vw;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
 }
 
 .wrapper .item{
