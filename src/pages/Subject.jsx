@@ -27,8 +27,14 @@ const Subject = () => {
   }
 
   useEffect(() => {
-    loadSubjects()
-    loadClassesAndBoards()
+    let loggedIn = localStorage.getItem("loggedIn")
+    if (JSON.parse(loggedIn)) {
+      loadSubjects()
+      loadClassesAndBoards()
+    }
+    else {
+      window.location.href = '/'
+    }
   }, [])
 
   const readFilePath = event => {

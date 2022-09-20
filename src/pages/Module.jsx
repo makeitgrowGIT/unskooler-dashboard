@@ -67,7 +67,13 @@ const Module = () => {
   }
 
   useEffect(() => {
-    initialLoad()
+    let loggedIn = localStorage.getItem("loggedIn")
+    if (JSON.parse(loggedIn)) {
+      initialLoad()
+    }
+    else {
+      window.location.href = '/'
+    }
   }, [])
 
   async function addModule(e) {

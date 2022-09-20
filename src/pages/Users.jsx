@@ -8,16 +8,22 @@ const Customers = () => {
 
   const [users, setusers] = useState([]);
   const userService = new UserService()
-  function loadUsers(){
-    userService.getAllUser().then((urs)=>{
+  function loadUsers() {
+    userService.getAllUser().then((urs) => {
       setusers(urs)
     })
   }
 
   useEffect(() => {
-    loadUsers()
+    let loggedIn = localStorage.getItem("loggedIn")
+    if (JSON.parse(loggedIn)) {
+      loadUsers()
+    }
+    else {
+      window.location.href = '/'
+    }
   }, [])
-  
+
   const columns = [
     // {
     //     name: "Profile Pic",
@@ -26,7 +32,7 @@ const Customers = () => {
     {
       name: "First Name",
       selector: (row) => row.firstname,
-     
+
     },
     {
       name: "Last Name",
@@ -39,15 +45,15 @@ const Customers = () => {
     {
       name: "Joining Date",
       selector: (row) => row.joiningDate,
-      
+
     },
     {
       name: "Email",
       selector: (row) => row.email,
-      
+
     },
   ];
-  
+
   return (
     <div>
       <h2 className="userPageHeading">

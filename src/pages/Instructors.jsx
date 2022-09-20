@@ -47,7 +47,13 @@ const Instructors = () => {
   }
 
   useEffect(() => {
-    instService.getAllInstocors().then((ins) => { setinstuctorList(ins) })
+    let loggedIn = localStorage.getItem("loggedIn")
+    if (JSON.parse(loggedIn)) {
+      instService.getAllInstocors().then((ins) => { setinstuctorList(ins) })
+    }
+    else {
+      window.location.href = '/'
+    }
   }, [])
 
 

@@ -118,9 +118,15 @@ const Class = () => {
     }
   }
   useEffect(() => {
-    loadICSEClasses()
-    loadBoards()
-    loadCBSEClasses()
+    let loggedIn = localStorage.getItem("loggedIn")
+    if (JSON.parse(loggedIn)) {
+      loadICSEClasses()
+      loadBoards()
+      loadCBSEClasses()
+    }
+    else {
+      window.location.href = '/'
+    }
   }, [])
 
 
@@ -141,19 +147,19 @@ const Class = () => {
     }
 
   }
-  function updateFeatured(classID, value){
+  function updateFeatured(classID, value) {
     console.log(value)
     if (value) {
       //If Value Tru
-        //Update class with feature false
-        classService.updateClass(classID,{featured:true}).then(()=>{
-          //Add new Featured
-          featuredService.addClassToFeature(classID)
-        })
+      //Update class with feature false
+      classService.updateClass(classID, { featured: true }).then(() => {
+        //Add new Featured
+        featuredService.addClassToFeature(classID)
+      })
       //else
     } else {
       //Update class with feature true
-      classService.updateClass(classID,{featured:false}).then(()=>{
+      classService.updateClass(classID, { featured: false }).then(() => {
         //Add new Featured
         featuredService.removeClassToFeature(classID)
       })
@@ -257,7 +263,7 @@ const Class = () => {
                 </div>
                 <div className="chapterNameMargin">
                   <div class="form-check form-switch">
-                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e)=>{updateFeatured(cl.classID,e.target.checked)}} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e) => { updateFeatured(cl.classID, e.target.checked) }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                   </div>
                 </div>
               </div>
@@ -308,7 +314,7 @@ const Class = () => {
                 </div>
                 <div className="chapterNameMargin">
                   <div class="form-check form-switch">
-                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e)=>{updateFeatured(cl.classID,e.target.checked)}} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e) => { updateFeatured(cl.classID, e.target.checked) }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                   </div>
                 </div>
               </div>
