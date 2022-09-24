@@ -75,7 +75,7 @@ const Subject = () => {
     setloading(true)
     e.preventDefault()
     //Create ID
-    var subjectID = subjectName.toLowerCase().replace(" ", "_").trim() + "_" + classID + "_" + classboardID
+    var subjectID = subjectName.toLowerCase().replace(/ /g, "_").trim() + "_" + classID + "_" + classboardID
     //console.log("Sub ID: "+subjectID)
     //Create Search tags
     var searchTags = [...new Set(subjectName.toLowerCase().split(" ").concat(subjectSummary.toLocaleLowerCase().split(" ")))]

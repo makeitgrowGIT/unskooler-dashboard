@@ -51,7 +51,7 @@ const Class = () => {
     e.preventDefault()
     setloading(true)
     //Generate Class ID
-    var class_id = className.replace(" ", "_").toLocaleLowerCase() + "_" + boardID.toString().toLocaleLowerCase()
+    var class_id = className.replace(/ /g, "_").toLocaleLowerCase() + "_" + boardID.toString().toLocaleLowerCase()
     boardService.appendClassIDToBoard(boardID, class_id)
     //Get Firebase URL: 
     var unsService = new UnskoolerHelperService()
