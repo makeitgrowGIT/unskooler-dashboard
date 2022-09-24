@@ -155,6 +155,7 @@ const Subject = () => {
                       className="form-control"
                       placeholder="Enter URL"
                       required
+                      accept="image/png, image/jpeg"
                       onChange={readFilePath}
                     ></input>
                   </div><br />

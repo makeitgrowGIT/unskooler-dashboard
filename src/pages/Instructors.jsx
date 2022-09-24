@@ -15,6 +15,7 @@ const Instructors = () => {
   const [loading, setloading] = useState(false)
   const instService = new InstructorService()
   const [instuctorList, setinstuctorList] = useState([])
+  const [searchTerm, setsearchTerm] = useState("")
 
   async function addInstuctor(e) {
     e.preventDefault()
@@ -135,7 +136,16 @@ const Instructors = () => {
       <div className="userTable">
         <DataTable
           columns={columns}
-          data={instuctorList}
+          // data={instuctorList}
+          data={instuctorList.filter((item) => {
+            if (searchTerm === "") {
+              return item;
+            } else if (
+              item.firstName.toLowerCase().includes(searchTerm.toLowerCase())||item.lastName.toLowerCase().includes(searchTerm.toLowerCase())
+            ) {
+              return item;
+            }
+          })}
           paginationRowsPerPageOptions={[8, 12, 25, 50]}
           paginationPerPage={8}
           pagination
@@ -143,7 +153,7 @@ const Instructors = () => {
           fixedHeaderScrollHeight="300px"
           highlightOnHover
           subHeader
-          subHeaderComponent={<input type="text" placeholder="Search" className="tableSearch" />}
+          subHeaderComponent={<input type="text" placeholder="Search" className="tableSearch" onChange={(e)=>{console.log(searchTerm);setsearchTerm(e.target.value)}} />}
           subHeaderAlign="left"
           selectableRows
         />

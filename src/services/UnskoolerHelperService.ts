@@ -13,6 +13,8 @@ export class UnskoolerHelperService {
             var res = await uploadBytes(firebaseStorageRef, file)
             var pathRef = storage.ref(uploadname)
             var url = await pathRef.getDownloadURL();
+            console.log("Url: ");
+            console.log(url);
             return { "success": true, "message": "File Uploaded ", "object": url }
         } catch (error) {
             console.log("Upload Error: "+file.name)

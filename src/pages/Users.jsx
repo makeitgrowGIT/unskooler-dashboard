@@ -7,6 +7,7 @@ import { UserService } from '../services/userService';
 const Customers = () => {
 
   const [users, setusers] = useState([]);
+  const [searchTerm, setsearchTerm] = useState("")
   const userService = new UserService()
   function loadUsers() {
     userService.getAllUser().then((urs) => {
@@ -66,7 +67,16 @@ const Customers = () => {
       <div className='userTable'>
         <DataTable
           columns={columns}
-          data={users}
+          // data={users}
+          data={users.filter((item) => {
+            if (searchTerm === "") {
+              return item;
+            } else if (
+              item.firstname.toLowerCase().includes(searchTerm.toLowerCase())||item.lastname.toLowerCase().includes(searchTerm.toLowerCase())
+            ) {
+              return item;
+            }
+          })}
           paginationRowsPerPageOptions={[8, 12, 25, 50]}
           paginationPerPage={8}
           pagination
@@ -75,7 +85,7 @@ const Customers = () => {
           selectableRows
           highlightOnHover
           subHeader
-          subHeaderComponent={<input type="text" placeholder="Search" className="tableSearch" />}
+          subHeaderComponent={<input type="text" placeholder="Search here" className="tableSearch" onChange={(e)=>{console.log(searchTerm);setsearchTerm(e.target.value)}} />}
           subHeaderAlign="left"
         />
       </div>

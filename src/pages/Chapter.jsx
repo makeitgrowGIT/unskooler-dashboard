@@ -218,6 +218,7 @@ const Chapter = () => {
                       type="file"
                       className="form-control"
                       placeholder="Enter name"
+                      accept="image/png, image/jpeg"
                       required
                       onChange={(e) => { readFilePath(e) }}
                     ></input>

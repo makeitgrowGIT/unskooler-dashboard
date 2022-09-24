@@ -235,7 +235,7 @@ const Class = () => {
                       className="form-control"
                       placeholder="Enter URL"
                       required
-                      accept="image/png, image/gif, image/jpeg"
+                      accept="image/png, image/jpeg"
                       defaultValue={imageFile}
                       onChange={readFilePath}
                     ></input>

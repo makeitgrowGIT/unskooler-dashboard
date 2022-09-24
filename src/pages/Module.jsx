@@ -10,6 +10,7 @@ import { SubjectService } from "../services/SubjectService";
 import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
 import { uploadBytes, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
+import { async } from "@firebase/util";
 
 const Module = () => {
   const [modal, setmodal] = useState(false);
@@ -32,10 +33,16 @@ const Module = () => {
   const [videoFile, setvideoFile] = useState(null)
   const [videoURL, setvideoURL] = useState("")
   const [videoDuration, setvideoDuration] = useState(0)
-  //For pdf
-  const [pdfPath, setpdfPath] = useState("")
-  const [pdfFile, setpdfFile] = useState(null)
-  const [pdfURL, setpdfURL] = useState("")
+
+  //forNotesAndAssignment
+  const [notesCount, setnotesCount] = useState("")
+  const [notesPaths, setnotesPaths] = useState([])
+  const [notesFiles, setnotesFiles] = useState([])
+
+  const [assignmetCount, setassignmetCount] = useState("")
+  const [assignmetPaths, setassignmetPaths] = useState([])
+  const [assignmetFiles, setassignmetFiles] = useState([])
+
   //For Uloading percent
   const [loadingMessage, setloadingMessage] = useState("<i class='bx bx-loader bx-spin'></i>")
   const [pecent, setpecent] = useState(0)
@@ -90,18 +97,44 @@ const Module = () => {
     //Upload thumbnail
     setloadingMessage("Uploading Thumbnail...")
     let thmbURL = await unskService.uploadFile(imageFile)
-    //Upload pdf with %
-    let pdfURLA = ""
-    if (pdfFile) {
-      setloadingMessage("Uploading Pdf...")
-      pdfURLA = await unskService.uploadFile(pdfFile)
-      if (pdfURLA.success) {
-        pdfURLA = pdfURLA.object
+
+    
+    //For Notes:
+    let notesURL = []
+    let c = 0
+    notesFiles.forEach( async (element) =>{
+      if (element) {
+        setloadingMessage(`Uploading Notes ${c+1}/${notesFiles.length}`)
+        let pdfURLA = await unskService.uploadFile(element)
+        c++
+        if (pdfURLA.success) {
+          notesURL.push(pdfURLA.object)
+        }
+        else {
+          alert(pdfURLA.message)
+        }
       }
-      else {
-        alert(pdfURLA.message)
+    });
+    console.log(notesURL)
+    
+    //For Assignments:
+    let assigmentUrls = []
+    let ca = 0
+    notesFiles.forEach( async (element) =>{
+      if (element) {
+        setloadingMessage(`Uploading Assignemnets ${ca+1}/${notesFiles.length}`)
+        let pdfURLA = await unskService.uploadFile(element)
+        ca++
+        if (pdfURLA.success) {
+          assigmentUrls.push(pdfURLA.object)
+        }
+        else {
+          alert(pdfURLA.message)
+        }
       }
-    }
+    });
+    console.log(assigmentUrls)
+    
     var duration = 0;
     var video = document.createElement('video');
     video.preload = 'metadata';
@@ -141,16 +174,19 @@ const Module = () => {
         "moduleID": module_id,
         "name": moduleName,
         "thumbnailURL": thmbURL.object,
-        "pdfUrl": pdfURLA,
+        "notes": notesURL,
+        "assignments":assigmentUrls,
         "videoURL": downloadURl
       }
       console.log(moduleObj)
-      //Upload ModuleObj
       moduleService.addNewModue(moduleObj).then(() => {
 
         initialLoad()
         setloading(false)
         setmodal(false)
+        setnotesCount("")
+        setnotesFiles([])
+        setnotesPaths([])
       }
       )
     })
@@ -170,11 +206,29 @@ const Module = () => {
     reader.readAsDataURL(event.target.files[0])
 
   }
+
+  const readURLFilePaths = (event, setPathsFunction,pathList, setFilesFunction,fileList) => {
+    console.log(pathList,fileList)
+    console.log(typeof(pathList),typeof(fileList))
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        let tempPaths = pathList
+        tempPaths.push( reader.result)
+        setPathsFunction(tempPaths)
+      }
+    }
+    let TempFiels = fileList;
+    TempFiels.push(event.target.files[0])
+    setFilesFunction(TempFiels)
+    reader.readAsDataURL(event.target.files[0])
+
+  }
   return (
     <>
-    <div className="notForMobile">
-      <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
-    </div>
+      <div className="notForMobile">
+        <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
+      </div>
       <div className="pageHeadingDiv">
         <h2 className="coursesChild">Courses {">"} Class {">"} Subject {">"} Chapter {">"} &nbsp;<span className="coursePath">Module</span></h2>
         <div>
@@ -182,7 +236,10 @@ const Module = () => {
             <ModalHeader toggle={() => setmodal(!modal)}>
               Add Module
             </ModalHeader>
-            <ModalBody>
+            <ModalBody style={{
+      maxHeight: 'calc(100vh - 210px)',
+      overflowY: 'auto'
+     }}>
               <form onSubmit={addModule}>
                 <Row>
                   <div>
@@ -190,6 +247,7 @@ const Module = () => {
                     <input
                       type="text"
                       className="form-control"
+                      style={{ "marginBottom": "20px"}}
                       placeholder="Enter name"
                       onChange={(e) => { setmoduleName(e.target.value) }}
                     ></input>
@@ -200,6 +258,7 @@ const Module = () => {
                     <input
                       type="number"
                       className="form-control"
+                      style={{ "marginBottom": "20px"}}
                       placeholder="Enter index"
                       onChange={(e) => { setmoduleIndex(e.target.value) }}
                     ></input>
@@ -210,6 +269,7 @@ const Module = () => {
                     <select
                       type="text"
                       className="form-control"
+                      style={{ "marginBottom": "20px"}}
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
@@ -223,6 +283,7 @@ const Module = () => {
                     <select
                       type="text"
                       className="form-control"
+                      style={{ "marginBottom": "20px"}}
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
@@ -238,6 +299,7 @@ const Module = () => {
                       className="form-control"
                       placeholder="Enter Chapter Summary"
                       required
+                      style={{ "marginBottom": "20px"}}
                       onChange={(e) => { setsubjecID(e.target.value) }}
                     >
                       <option>Select Subject</option>
@@ -252,6 +314,7 @@ const Module = () => {
                       className="form-control"
                       placeholder="Enter Chapter Summary"
                       required
+                      style={{ "marginBottom": "20px"}}
                       defaultValue={chapters.length > 0 ? chapters[0].chapterID : ""}
                       onChange={(e) => { setchapterID(e.target.value) }}
                     >
@@ -267,19 +330,78 @@ const Module = () => {
                       className="form-control"
                       placeholder="Enter name"
                       required
+                      style={{ "marginBottom": "20px"}}
+                      accept="image/png, image/jpeg"
                       onChange={(e) => { readURLFilePath(e, setclassPicPath, setimageFile) }}
                     ></input>
                   </div>
 
                   <div>
-                    <label htmlFor="name">Upload PDF</label>
-                    <input
-                      type="file"
+                    <label htmlFor="name">Upload Notes</label>
+                    <select
+                      type="number"
                       className="form-control"
-                      placeholder="Enter name"
-                      required
-                      onChange={(e) => { readURLFilePath(e, setpdfPath, setpdfFile) }}
-                    ></input>
+                      onChange={(e) => { setnotesCount(e.target.value) }}
+                    >
+                      <option value={[]}>0</option>
+                      <option value={[1]}>1</option>
+                      <option value={[1, 2]}>2</option>
+                      <option value={[1, 2, 3]}>3</option>
+                      <option value={[1, 2, 3, 4]}>4</option>
+                      <option value={[1, 2, 3, 4, 5]}>5</option>
+                    </select>
+                    {
+                      // console.log(notesCount)
+                      notesCount.split(",").map((n) => {
+                        if (Number.parseInt(n) > 0) {
+                          return <input
+                            type="file"
+                            accept="application/pdf"
+                            className="form-control"
+                            placeholder="Enter name"
+                            style={{ "marginBottom": "10px", "marginTop": "10px" }}
+                            required
+                            onChange={(e) => { readURLFilePaths(e, setnotesPaths,notesPaths, setnotesFiles,notesFiles) }}
+                          ></input>
+                        }
+
+                      })
+                    }
+                    <hr />
+                  </div>
+
+                  <div>
+                    <label htmlFor="name">Upload Assignmets</label>
+                    <select
+                      type="number"
+                      className="form-control"
+                      onChange={(e) => { setassignmetCount(e.target.value) }}
+                    >
+                      <option value={[]}>0</option>
+                      <option value={[1]}>1</option>
+                      <option value={[1, 2]}>2</option>
+                      <option value={[1, 2, 3]}>3</option>
+                      <option value={[1, 2, 3, 4]}>4</option>
+                      <option value={[1, 2, 3, 4, 5]}>5</option>
+                    </select>
+                    {
+                      // console.log(notesCount)
+                      assignmetCount.split(",").map((n) => {
+                        if (Number.parseInt(n) > 0) {
+                          return <input
+                            type="file"
+                            accept="application/pdf"
+                            className="form-control"
+                            placeholder="Enter name"
+                            style={{ "marginBottom": "10px", "marginTop": "10px" }}
+                            required
+                            onChange={(e) => { readURLFilePaths(e, setassignmetPaths,assignmetPaths, setassignmetFiles,assignmetFiles) }}
+                          ></input>
+                        }
+
+                      })
+                    }
+                    <hr />
                   </div>
 
                   <div>
@@ -288,16 +410,20 @@ const Module = () => {
                       type="file"
                       className="form-control"
                       placeholder="Enter name"
-                      required
+                      style={{ "marginBottom": "20px"}}
+                      accept="video/mp4,video/x-m4v,video/*"
                       onChange={(e) => { readURLFilePath(e, setvideoPath, setvideoFile) }}
                     ></input>
                   </div>
+                  <button 
+                      style={{ "marginBottom": "20px"}}
+                      className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? loadingMessage : "Sumbit"}</button>
 
                 </Row>
-                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? loadingMessage : "Sumbit"}</button>
               </form>
             </ModalBody>
           </Modal>
+          
           <button className="addInstructor" onClick={() => setmodal(true)}>
             Add Module
           </button>
