@@ -112,6 +112,7 @@ const Module = () => {
       if (video.duration < 1) {
 
         console.log("Invalid Video! video is less than 1 second");
+        alert("Invalid Video! video is less than 1 second");
         return;
       }
       duration = video.duration;
@@ -123,7 +124,7 @@ const Module = () => {
 
 
 
-    unskService.uploadFileWithPercent(videoFile, setloadingMessage, setvideoURL, (err) => { alert(err) }, () => {
+    unskService.uploadFileWithPercent(videoFile, setloadingMessage, setvideoURL, (err) => { alert(err) }, (downloadURl) => {
       setloadingMessage("uploading...")
       console.log(videoDuration)
       if (chapterID.length < 2) {
@@ -141,7 +142,7 @@ const Module = () => {
         "name": moduleName,
         "thumbnailURL": thmbURL.object,
         "pdfUrl": pdfURLA,
-        "videoURL": videoURL
+        "videoURL": downloadURl
       }
       console.log(moduleObj)
       //Upload ModuleObj

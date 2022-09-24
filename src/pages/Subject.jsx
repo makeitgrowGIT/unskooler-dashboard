@@ -168,7 +168,7 @@ const Subject = () => {
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
                       <option>Select Board</option>
-                      {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs.length} Courses)</option> })}
+                      {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs?br.classIDs.length:0} Courses)</option> })}
                     </select>
                   </div><br />
                   <div>

@@ -15,8 +15,8 @@ function Login() {
   const [remember, setremember] = useState(false)
 
   useEffect(() => {
-    let loggedIn = localStorage.getItem("loggedIn")
-    if(JSON.parse(loggedIn)){
+    let remember = localStorage.getItem("remember")
+    if(JSON.parse(remember)){
       window.location.href='/class'
     }
   }, [])
@@ -36,9 +36,10 @@ function Login() {
     let result  =  await loginService.verifyAdmin(username,password);
     console.log(result)
     if (result) {
+      localStorage.setItem("username",username)
+      localStorage.setItem("loggedIn",true)
       if (remember) {
-        localStorage.setItem("username",username)
-        localStorage.setItem("loggedIn",true)
+        localStorage.setItem("remember",true)
       }
       window.location.href='/class'
     } else {

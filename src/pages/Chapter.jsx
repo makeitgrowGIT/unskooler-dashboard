@@ -86,6 +86,7 @@ const Chapter = () => {
 
         initialLoad()
         setloading(false)
+        setmodal(false)
       })
     } else {
       alert(responseObj.message)
