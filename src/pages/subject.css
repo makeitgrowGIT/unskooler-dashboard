@@ -9,6 +9,13 @@
     grid-template-columns: auto auto auto auto;
 }
 
+.notForMobile{
+    display: none;
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+  }
+
 .subjectColumn .item{
     width: 17vw;
     padding: 1vw;
@@ -43,4 +50,19 @@
 
 .chapterNameMargin{
     margin-bottom:0.5rem ;
+}
+
+@media only screen and (max-width: 700px) {
+    .notForMobile{
+        display: block;
+        visibility: visible;
+      }
+      .warning{
+        font-size: 5vw;
+        font-weight: 500;
+      }
+
+    body{
+        visibility: hidden;
+    }
 }

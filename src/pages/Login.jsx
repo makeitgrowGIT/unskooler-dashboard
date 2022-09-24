@@ -46,8 +46,17 @@ function Login() {
     }
   }
 
+  // const mediaQuery = window.matchMedia('(max-width: 700px)')
+  // if (mediaQuery.matches) {
+  //   // Then trigger an alert
+  //   alert('Media Query Matched!')
+  // }
+
   return (
     <>
+    <div className="notForMobile">
+     <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
+    </div>
       <div className="loginHeroContainer">
         <div className="leftContainer">
           <div className="leftInnerContainer">

@@ -112,6 +112,9 @@ const Chapter = () => {
   }
   return (
     <>
+    <div className="notForMobile">
+      <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
+    </div>
       <div className="pageHeadingDiv">
         <h2 className="coursesChild">Courses {">"} Class {">"} Subject {">"}&nbsp;<span className="coursePath">Chapter</span></h2>
         <div>

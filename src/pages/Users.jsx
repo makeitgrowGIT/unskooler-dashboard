@@ -55,7 +55,11 @@ const Customers = () => {
   ];
 
   return (
+    
     <div>
+    <div className="notForMobile">
+      <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
+    </div>
       <h2 className="userPageHeading">
         View Student Details
       </h2>

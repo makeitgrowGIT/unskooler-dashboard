@@ -2,6 +2,12 @@ body{
     /* overflow-y: hidden; */
     overflow-x: scroll;
 }
+.notForMobile{
+    display: none;
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+  }
 
 .coursePath{
     color: #2D3179;
@@ -59,4 +65,23 @@ body{
 
 .icseSection{
     margin-top: 2rem;
+}
+
+@media only screen and (max-width: 700px) {
+    .notForMobile{
+        display: block;
+        visibility: visible;
+      }
+      .warning{
+        font-size: 5vw;
+        font-weight: 500;
+      }
+
+    body{
+        visibility: hidden;
+    }
+
+
+
+    
 }
