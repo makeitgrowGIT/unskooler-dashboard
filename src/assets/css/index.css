@@ -2,7 +2,7 @@
 
 :root {
     --main-bg: #ffffff;
-    --second-bg: #fafafb;
+    --second-bg: #ffffff;
     --txt-color: #455560;
     --txt-white: #fff;
     --main-color: #2D3179;
@@ -53,6 +53,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 0.7px;
+    background-color: var(--second-bg);
     /* overflow: hidden; */
 }
 
@@ -80,7 +81,6 @@ input {
     border: 2px solid transparent;
     outline: 0;
 }
-
 input:focus {
     border: 2px solid var(--main-color);
 }

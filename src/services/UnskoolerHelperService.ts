@@ -65,7 +65,6 @@ export class UnskoolerHelperService {
                 async () => {
                     // Upload completed successfully, now we can get the download URL
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        //console.log('File available at', downloadURL);
                         setUrlFunction(downloadURL)
                         complitionFunction(downloadURL)
                         return { "success": false, "message": "Unable to add class: "  }

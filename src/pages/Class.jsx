@@ -15,6 +15,7 @@ const Class = () => {
   const featuredService = new FeaturedService();
   const [icseClasses, seticseClasses] = useState([]);
   const [cbseClasses, setcbseClasses] = useState([]);
+  const [freeClasses, setfreeClasses] = useState([]);
   const [className, setclassName] = useState("");
   const [classPicPath, setclassPicPath] = useState("");
   const [imageFile, setimageFile] = useState(null)
@@ -34,6 +35,11 @@ const Class = () => {
   function loadCBSEClasses() {
     classService.getClassByBoardID("CBSE").then((docs) => {
       setcbseClasses(docs);
+    });
+  }
+  function loadfreeClasses() {
+    classService.getClassByBoardID("Study Material").then((docs) => {
+      setfreeClasses(docs);
     });
   }
   function loadBoards() {
@@ -77,6 +83,7 @@ const Class = () => {
         loadICSEClasses()
         loadBoards()
         loadCBSEClasses()
+        loadfreeClasses()
         setloading(false)
         setmodal(false)
       })
@@ -100,6 +107,7 @@ const Class = () => {
         loadICSEClasses()
         loadBoards()
         loadCBSEClasses()
+        loadfreeClasses()
         setloading(false)
         setmodal(false)
 
@@ -123,6 +131,7 @@ const Class = () => {
       loadICSEClasses()
       loadBoards()
       loadCBSEClasses()
+      loadfreeClasses()
     }
     else {
       window.location.href = '/'
@@ -169,7 +178,7 @@ const Class = () => {
 
   }
   return (
-    <>
+    <div className="mainBG">
     <div className="notForMobile">
       <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
     </div>
@@ -340,7 +349,61 @@ const Class = () => {
           })}
         </div>
       </div>
-    </>
+      <br />
+      <br />
+
+      <div className="cbseSection">
+        <h2 className="cbse"></h2>
+        <div className="wrapper">
+          {freeClasses.map(cl => {
+            return <div className="item">
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h7>{cl.boardID}</h7>
+                </div>
+                <i class='bx bxs-edit' onClick={async () => {
+                  setmode("update");
+                  setclassName(cl.name)
+                  setclassPrice(cl.price)
+                  setboardID(cl.boardID)
+                  setupdateClassObj(cl)
+                  setmodal(true);
+                }} style={{ cursor: "pointer" }}></i>
+              </div>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h5>{cl.name}</h5>
+                </div>
+                <div className="chapterNameMargin">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e) => { updateFeatured(cl.classID, e.target.checked) }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                  </div>
+                </div>
+              </div>
+              <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
+              <br />
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  ₹{cl.price}
+                </div>
+                <div className="chapterNameMargin">
+                  <Rating initialRating={cl.rating}
+                    readonly
+                    emptySymbol="bx bx-star"
+                    fullSymbol="bx bxs-star"
+                    fractions={2}
+
+                  />
+                </div>
+              </div>
+            </div>
+          })}
+        </div>
+      </div>
+      <br />
+      <br />
+
+    </div>
   );
 };
 

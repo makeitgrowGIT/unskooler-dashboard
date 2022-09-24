@@ -55,9 +55,10 @@ body{
 .wrapper .item{
     min-width: 17vw;
     padding: 1vw;
-    margin-left: 1vh;
+    margin-left: 10vh;
+    margin-bottom: 10vh;
     height: 33vh;
-    background: #FAFBFF;
+    background: #f6f7ff;
     box-shadow: 0px 8px 16px rgba(143, 149, 178, 0.15);
     border-radius: 16px;
     color: #2D3179;
