@@ -50,6 +50,15 @@ const Sidebar = props => {
                             title="Guide"
                         />
             </Link>
+            <div style={{cursor:"pointer"}} onClick={()=>{
+                localStorage.clear()
+                window.location.href='/'
+            }}>
+            <SidebarItem
+                            title="Logount"
+                            icon="bx bx-user-circle"
+                            
+                        /></div>
         </div>
     )
 }
