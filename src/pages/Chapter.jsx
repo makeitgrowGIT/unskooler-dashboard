@@ -61,7 +61,7 @@ const Chapter = () => {
     //Generate id
     let chapter_id = chapterName.replace(/ /g, "_").trim().toLocaleLowerCase() + "_" + subjectID + "_" + classID + "_" + boardID
     //add chpaterID to subject
-    subjectService.addCphaterID(chapter_id)
+    subjectService.addCphaterID(subjectID,chapter_id)
     //add create search tags
     var searchTags = [...new Set(chapterName.toLowerCase().split(" ").concat(chapterSummary.toLocaleLowerCase().split(" ")))]
     //add seuech tags
