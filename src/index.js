@@ -18,7 +18,7 @@ const store = createStore(
   rootReducer
 )
 
-document.title = 'Unskooler'
+document.title = 'Unskooler Dashboard'
 
 ReactDOM.render(
   <Provider store={store}>
