@@ -75,7 +75,7 @@ const Subject = () => {
     setloading(true)
     e.preventDefault()
     //Create ID
-    var subjectID = subjectName.toLowerCase().replace(/ /g, "_").trim() + "_" + classID + "_" + classboardID
+    var subjectID = subjectName.toLowerCase().replace(/ /g, "_").trim() + "_" + classID + "_" + classboardID.toLocaleLowerCase().replace(/ /g, "_")
     //console.log("Sub ID: "+subjectID)
     //Create Search tags
     var searchTags = [...new Set(subjectName.toLowerCase().split(" ").concat(subjectSummary.toLocaleLowerCase().split(" ")))]
@@ -104,6 +104,12 @@ const Subject = () => {
         loadSubjects()
         setloading(false)
         setmodal(false)
+        setsubjectName("")
+        setsubjectSummary("")
+        setsubjectThumbnailURl("")
+        setclassID("")
+        setimageFile(null)
+        setboardID("CBSE")
       })
     }
     else {
@@ -200,13 +206,13 @@ const Subject = () => {
         {subjects.map((sub) => {
           return <div className="item">
             <div className="chapterNameMargin">
-              <h7 className="chaptername">{sub.name}</h7>
+              <h5>{sub.name}</h5>
             </div>
             <div className="chapterNameMargin" style={{ marginBottom: '0px', fontSize: "0.5rem" }}>
-              <h7 className="chaptername">{sub.summary}</h7>
+              <h6>{sub.summary}</h6>
             </div>
             <div className="chapterNameMargin" style={{ marginBottom: '0px' }}>
-              <h7 className="chaptername">{sub.chapterIDs.length} Chapters</h7>
+              <h7>{sub.chapterIDs.length} Chapters</h7>
             </div>
             <div className="subjectbgImg1" style={{ backgroundImage: "url(" + sub.thumbnailURL + ")" }}></div>
           </div>

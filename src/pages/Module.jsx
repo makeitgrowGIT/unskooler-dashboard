@@ -88,7 +88,7 @@ const Module = () => {
     setloading(true)
     let unskService = new UnskoolerHelperService()
     //Create module id
-    let module_id = moduleName.trim().replace(/ /g, "_").toLocaleLowerCase() + "_" + chapterID + "_" + subjecID + "_" + classID + "_" + boardID
+    let module_id = moduleName.trim().replace(/ /g, "_").toLocaleLowerCase() + "_" + chapterID + "_" + subjecID + "_" + classID + "_" + boardID.toLocaleLowerCase().replace(/ /g, "_")
     //Create Search Tags
     let searcgTags = moduleName.toLocaleLowerCase().split(" ")
     //Add search tags
@@ -120,7 +120,7 @@ const Module = () => {
     //For Assignments:
     let assigmentUrls = []
     let ca = 0
-    notesFiles.forEach( async (element) =>{
+    assignmetFiles.forEach( async (element) =>{
       if (element) {
         setloadingMessage(`Uploading Assignemnets ${ca+1}/${notesFiles.length}`)
         let pdfURLA = await unskService.uploadFile(element)
@@ -434,8 +434,11 @@ const Module = () => {
         {modules.map((md) => {
           return <div className="item">
             <div className="chapterNameMargin">
-              <h7 className="chaptername">{md.name}</h7><br />
-              <h7 className="chaptername">{md.durationInSeconds} Sec</h7>
+              <h5 >{md.name}</h5>
+              <h6 >{md.durationInSeconds} Sec</h6>
+              <>
+              <h8>{md.notes.length} Notes,</h8><h8> {md.assignments.length} Assigments</h8>
+              </>
             </div>
             <div className="subjectbgImg1" style={{ backgroundImage: "url(" + md.thumbnailURL + ")" }}></div>
           </div>

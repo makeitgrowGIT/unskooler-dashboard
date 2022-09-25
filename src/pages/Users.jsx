@@ -24,7 +24,17 @@ const Customers = () => {
       window.location.href = '/'
     }
   }, [])
+  function stringDateFormat(StringDate) {
+    var date =  new Date(StringDate)
+    var m = date.getMonth()
+    var d = date.getDate()
+    var y = date.getFullYear()
+    var mm  = date.getMinutes()
+    var hr = date.getHours()%12
+    var prfix = date.getHours()>12?"PM":"AM";
 
+    return `${hr}:${mm} ${prfix} ${d}-${m}-${y}`
+  }
   const columns = [
     // {
     //     name: "Profile Pic",
@@ -41,11 +51,11 @@ const Customers = () => {
     },
     {
       name: "last Seen",
-      selector: (row) => row.lastSeen,
+      selector: (row) => stringDateFormat(row.lastSeen),
     },
     {
       name: "Joining Date",
-      selector: (row) => row.joiningDate,
+      selector: (row) => stringDateFormat(row.joiningDate),
 
     },
     {

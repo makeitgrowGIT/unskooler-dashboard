@@ -4,7 +4,7 @@ import { Module } from "../models/Module";
 
 
 export class ModuleService{
-    moduleDb = db.collection("modules_test");
+    moduleDb = db.collection("modules");
 
     public async getAllModules (){
         var modules: Array<Module> =[];

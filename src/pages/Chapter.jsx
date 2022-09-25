@@ -59,7 +59,7 @@ const Chapter = () => {
     e.preventDefault()
     setloading(true)
     //Generate id
-    let chapter_id = chapterName.replace(/ /g, "_").trim().toLocaleLowerCase() + "_" + subjectID + "_" + classID + "_" + boardID
+    let chapter_id = chapterName.replace(/ /g, "_").trim().toLocaleLowerCase() + "_" + subjectID + "_" + classID + "_" + boardID.toLocaleLowerCase().replace(/ /g, "_")
     //add chpaterID to subject
     subjectService.addCphaterID(subjectID,chapter_id)
     //add create search tags
@@ -238,8 +238,9 @@ const Chapter = () => {
         {chapters.map((ch) => {
           return <div className="item">
             <div className="chapterNameMargin">
-              <h7 className="chaptername">{ch.name}</h7><br />
-              <h7 className="chaptername">{ch.moduleIDs.length} Modules</h7>
+              <h5 >{ch.name}</h5>
+              <h6 >{ch.summary}</h6>
+              <h7 >{ch.moduleIDs.length} Modules</h7>
             </div>
             <div className="subjectbgImg1" style={{ backgroundImage: "url(" + ch.thumbnailURL + ")" }}></div>
           </div>
