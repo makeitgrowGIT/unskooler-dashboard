@@ -62,11 +62,13 @@ const Subject = () => {
     var temp_mapping = new Map()
     for (let index = 0; index < temp_boards.length; index++) {
       const board = temp_boards[index];
+      console.log("board")
+      console.log(board.boardID)
       var tempC_Claases = await classService.getClassByBoardID(board.boardID)
       temp_mapping.set(board.boardID, tempC_Claases)
 
     }
-    //console.log(temp_mapping)
+    // console.log(temp_boards)
     setboards(temp_boards)
     setclasses(temp_mapping)
   }

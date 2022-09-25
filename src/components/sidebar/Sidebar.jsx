@@ -55,7 +55,7 @@ const Sidebar = props => {
                 window.location.href='/'
             }}>
             <SidebarItem
-                            title="Logount"
+                            title="Logout"
                             icon="bx bx-user-circle"
                             
                         /></div>
