@@ -435,7 +435,7 @@ const Module = () => {
           return <div className="item">
             <div className="chapterNameMargin">
               <h5 >{md.name}</h5>
-              <h6 >{md.durationInSeconds} Sec</h6>
+              <h6 >{Math.floor( md.durationInSeconds/60) }:{md.durationInSeconds%60} Mins</h6>
               <>
               <h8>{md.notes.length} Notes,</h8><h8> {md.assignments.length} Assigments</h8>
               </>
