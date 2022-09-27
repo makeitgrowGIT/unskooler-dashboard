@@ -101,7 +101,7 @@ const Chapter = () => {
         setclassPicPath(reader.result)
       }
     }
-    if (event.target.files[0].size > 250000) {
+    if (event.target.files[0].size > 5000000) {
       alert("Image is too big! Must be less Than 250kb");
       setclassPicPath()
     }

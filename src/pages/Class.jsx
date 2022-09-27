@@ -258,7 +258,7 @@ const Class = () => {
       </div>
 
       <div className="cbseSection">
-        <h2 className="cbse"></h2>
+        <h2 className="cbse">CBSE</h2>
         <div className="wrapper">
           {cbseClasses.map(cl => {
             return <div className="item">
@@ -309,7 +309,7 @@ const Class = () => {
       <br />
 
       <div className="cbseSection">
-        <h2 className="cbse"></h2>
+        <h2 className="cbse">ICSE</h2>
         <div className="wrapper">
           {icseClasses.map(cl => {
             return <div className="item">
@@ -359,7 +359,7 @@ const Class = () => {
       <br />
 
       <div className="cbseSection">
-        <h2 className="cbse"></h2>
+        <h2 className="cbse">Free Material</h2>
         <div className="wrapper">
           {freeClasses.map(cl => {
             return <div className="item">

@@ -26,13 +26,29 @@ body{
     margin-top:1rem ;
     overflow-x: auto;
     /* overflow-y: hidden; */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    /* -ms-overflow-style: none;  Internet Explorer 10+ */
     scrollbar-width: none;  
     /* border: 1px solid red; */
 }
 .cbseSection::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
+    /* display: none;  Safari and Chrome */
+    width: 82vw;
+    height: 8px;
+    margin-left: 20vw;
 }
+.cbseSection::-webkit-scrollbar-thumb { 
+    /* display: none;  Safari and Chrome */
+    height: 5px;
+    background-color: #b1baf5;
+}
+.cbseSection::-webkit-scrollbar-track { 
+    /* display: none;  Safari and Chrome */
+    height: 5px;
+    width: 80vw;
+    border-radius: 8px;
+    background-color: #dcdee0;
+}
+
 
 .cbse{
     font-family: 'Nunito Sans';
