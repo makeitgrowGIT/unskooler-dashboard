@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Link } from 'react-router-dom'
 
@@ -28,9 +28,16 @@ const SidebarItem = props => {
 const Sidebar = props => {
 
     const activeItem = sidebar_items.findIndex(item => item.route === props.location.pathname)
-
+    const [showSidebar, setshowSidebar] = useState(true)
+    useEffect(() => {
+      var loc = window.location.href;
+      console.log("loc")
+      setshowSidebar(loc.split("/").at(-1)==="")
+      
+    }, [])
+    
     return (
-        <div className='sidebar'>
+        <div className='sidebar' style={{display:showSidebar?"none":"block"}}>
             <div className="sidebar__logo"  style={{cursor:"pointer"}} href={ howToFile} target="_blank" download>
                 <img src={logo} alt="company logo"/>
             </div>
@@ -45,11 +52,7 @@ const Sidebar = props => {
                     </Link>
                 ))
             }
-            <Link className="sidebar__logo"  style={{cursor:"pointer"}} to={ howToFile} target="_blank" download>
-            <SidebarItem
-                            title="Guide"
-                        />
-            </Link>
+            
             <div style={{cursor:"pointer"}} onClick={()=>{
                 localStorage.clear()
                 window.location.href='/'
@@ -59,6 +62,11 @@ const Sidebar = props => {
                             icon="bx bx-user-circle"
                             
                         /></div>
+            <Link className="sidebar__logo"  style={{cursor:"pointer"}} to={ howToFile} target="_blank" download>
+            <SidebarItem
+                            title="Guide"
+                        />
+            </Link>
         </div>
     )
 }
