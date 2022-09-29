@@ -69,5 +69,14 @@ export class ClassService {
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
+    public async deleteClass(classID: string){
+        try {
+            await this.classDB.doc(classID).delete()
+            return { "success": true, "message": "Class deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete class: " + error }
+        }
+
+    }
 
 }

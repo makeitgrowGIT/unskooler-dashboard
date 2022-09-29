@@ -22,4 +22,14 @@ export class BoardService{
     public appendClassIDToBoard(boardID: string, classID:string){
     this.boardDB.doc(boardID).update({classIDs: firebase.firestore.FieldValue.arrayUnion(classID)})
     }
+
+    public async deleteCassID(boardID:string, classID: string){
+        try {
+            await this.boardDB.doc(boardID).update({"classIDs": firebase.firestore.FieldValue.arrayRemove(classID) })
+            return { "success": true, "message": "Class deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete class: " + error }
+        }
+
+    }
 }

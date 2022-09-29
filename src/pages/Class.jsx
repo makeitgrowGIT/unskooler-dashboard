@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Rating from "react-rating";
-import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Button, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import { Convert } from "../models/Class";
 import "../pages/class.css";
 import { BoardService } from "../services/BoardService";
 import { ClassService } from "../services/ClassService";
 import { FeaturedService } from "../services/FeaturedService";
 import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
-import {Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const Class = () => {
   const [modal, setmodal] = useState(false);
@@ -26,6 +26,8 @@ const Class = () => {
   const [loading, setloading] = useState(false)
   const [mode, setmode] = useState("submit")
   const [updateClassObj, setupdateClassObj] = useState(null)
+  const [deleteObj, setdeleteObj] = useState(null)
+  const [deleteModal, setdeleteModal] = useState(false)
 
   function loadICSEClasses() {
     classService.getClassByBoardID("ICSE").then((docs) => {
@@ -92,7 +94,7 @@ const Class = () => {
         setimageFile(null)
         setupdateClassObj(null)
         setclassName("")
-        
+
       })
     } else {
       alert(responseObj.message)
@@ -186,9 +188,9 @@ const Class = () => {
   }
   return (
     <div className="mainBG">
-    <div className="notForMobile">
-      <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
-    </div>
+      <div className="notForMobile">
+        <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
+      </div>
       <div className="pageHeadingDiv">
         <h2 className="coursesChild">Courses {">"} <span className="coursePath">Class</span></h2>
         <div>
@@ -255,6 +257,30 @@ const Class = () => {
           <button className="addInstructor" onClick={() => { setmode("submit"); setmodal(true) }}>
             Add Class
           </button>
+          <Modal isOpen={deleteModal} toggle={() => setdeleteModal(!deleteModal)}>
+            <ModalHeader toggle={() => setdeleteModal(false)}>
+              Delete Classes
+            </ModalHeader>
+            <ModalBody>
+              Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
+              <Button onClick={() => {
+                setloading(true)
+                if (deleteObj) {
+                  boardService.deleteCassID(deleteObj.boardID, deleteObj.classID).then((res) => {
+
+                    classService.deleteClass(deleteObj.classID).then((res) => {
+                      boardService.deleteCassID()
+                      setloading(false)
+                      setdeleteModal(false)
+                      loadCBSEClasses()
+                      loadICSEClasses()
+                      loadfreeClasses()
+                    })
+                  })
+                }
+              }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
+            </ModalBody>
+          </Modal>
         </div>
       </div>
 
@@ -262,6 +288,64 @@ const Class = () => {
         <h2 className="cbse">CBSE</h2>
         <div className="wrapper">
           {cbseClasses.map(cl => {
+            return <div className="item" >
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h7>{cl.boardID}</h7>
+                </div>
+                <i class='bx bxs-edit' onClick={async () => {
+                  setmode("update");
+                  setclassName(cl.name)
+                  setclassPrice(cl.price)
+                  setboardID(cl.boardID)
+                  setupdateClassObj(cl)
+                  setmodal(true);
+                }} style={{ cursor: "pointer" }}></i>
+                <i class='bx bxs-trash' onClick={async () => {
+                  setdeleteModal(true);
+                  setdeleteObj(cl)
+                }} style={{ cursor: "pointer" }}></i>
+              </div>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h5>{cl.name}</h5>
+                </div>
+                <div className="chapterNameMargin">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e) => { updateFeatured(cl.classID, e.target.checked) }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                  </div>
+                </div>
+              </div>
+
+              <Link to={"/subject/" + cl.classID}>
+                <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
+                <br />
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                  <div className="chapterNameMargin">
+                    ₹{cl.price}
+                  </div>
+                  <div className="chapterNameMargin">
+                    <Rating initialRating={cl.rating}
+                      readonly
+                      emptySymbol="bx bx-star"
+                      fullSymbol="bx bxs-star"
+                      fractions={2}
+
+                    />
+                  </div>
+                </div>
+              </Link>
+            </div>
+          })}
+        </div>
+      </div>
+      <br />
+      <br />
+
+      <div className="cbseSection">
+        <h2 className="cbse">ICSE</h2>
+        <div className="wrapper">
+          {icseClasses.map(cl => {
             return <div className="item" >
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
@@ -286,80 +370,26 @@ const Class = () => {
                   </div>
                 </div>
               </div>
-              
-              <Link to = {"/subject/"+cl.classID}>
-              <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
-              <br />
-              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-                <div className="chapterNameMargin">
-                  ₹{cl.price}
-                </div>
-                <div className="chapterNameMargin">
-                  <Rating initialRating={cl.rating}
-                    readonly
-                    emptySymbol="bx bx-star"
-                    fullSymbol="bx bxs-star"
-                    fractions={2}
 
-                  />
+              <Link to={"/subject/" + cl.classID}>
+                <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
+                <br />
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                  <div className="chapterNameMargin">
+                    ₹{cl.price}
+                  </div>
+                  <div className="chapterNameMargin">
+                    <Rating initialRating={cl.rating}
+                      readonly
+                      emptySymbol="bx bx-star"
+                      fullSymbol="bx bxs-star"
+                      fractions={2}
+
+                    />
+                  </div>
                 </div>
-              </div>
               </Link>
             </div>
-          })}
-        </div>
-      </div>
-      <br />
-      <br />
-
-      <div className="cbseSection">
-        <h2 className="cbse">ICSE</h2>
-        <div className="wrapper">
-          {icseClasses.map(cl => {
-            return <div className="item" >
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <div className="chapterNameMargin">
-                <h7>{cl.boardID}</h7>
-              </div>
-              <i class='bx bxs-edit' onClick={async () => {
-                setmode("update");
-                setclassName(cl.name)
-                setclassPrice(cl.price)
-                setboardID(cl.boardID)
-                setupdateClassObj(cl)
-                setmodal(true);
-              }} style={{ cursor: "pointer" }}></i>
-            </div>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <div className="chapterNameMargin">
-                <h5>{cl.name}</h5>
-              </div>
-              <div className="chapterNameMargin">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" defaultChecked={cl.featured} onChange={(e) => { updateFeatured(cl.classID, e.target.checked) }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                </div>
-              </div>
-            </div>
-            
-            <Link to = {"/subject/"+cl.classID}>
-            <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
-            <br />
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <div className="chapterNameMargin">
-                ₹{cl.price}
-              </div>
-              <div className="chapterNameMargin">
-                <Rating initialRating={cl.rating}
-                  readonly
-                  emptySymbol="bx bx-star"
-                  fullSymbol="bx bxs-star"
-                  fractions={2}
-
-                />
-              </div>
-            </div>
-            </Link>
-          </div>
           })}
         </div>
       </div>
@@ -371,49 +401,49 @@ const Class = () => {
         <div className="wrapper">
           {freeClasses.map(cl => {
             return <div className="item" >
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <div className="chapterNameMargin">
-                <h7>{cl.boardID}</h7>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h7>{cl.boardID}</h7>
+                </div>
+                <i class='bx bxs-edit' onClick={async () => {
+                  setmode("update");
+                  setclassName(cl.name)
+                  setclassPrice(cl.price)
+                  setboardID(cl.boardID)
+                  setupdateClassObj(cl)
+                  setmodal(true);
+                }} style={{ cursor: "pointer" }}></i>
               </div>
-              <i class='bx bxs-edit' onClick={async () => {
-                setmode("update");
-                setclassName(cl.name)
-                setclassPrice(cl.price)
-                setboardID(cl.boardID)
-                setupdateClassObj(cl)
-                setmodal(true);
-              }} style={{ cursor: "pointer" }}></i>
-            </div>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <div className="chapterNameMargin">
-                <h5>{cl.name}</h5>
-              </div>
-              <div className="chapterNameMargin">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" defaultChecked={cl.featured} onChange={(e) => { updateFeatured(cl.classID, e.target.checked) }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <div className="chapterNameMargin">
+                  <h5>{cl.name}</h5>
+                </div>
+                <div className="chapterNameMargin">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" defaultChecked={cl.featured} onChange={(e) => { updateFeatured(cl.classID, e.target.checked) }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <Link to = {"/subject/"+cl.classID}>
-            <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
-            <br />
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <div className="chapterNameMargin">
-                ₹{cl.price}
-              </div>
-              <div className="chapterNameMargin">
-                <Rating initialRating={cl.rating}
-                  readonly
-                  emptySymbol="bx bx-star"
-                  fullSymbol="bx bxs-star"
-                  fractions={2}
 
-                />
-              </div>
+              <Link to={"/subject/" + cl.classID}>
+                <div className="subjectbgImg1" style={{ backgroundImage: "url(" + cl.thumbnailUrl + ")" }}></div>
+                <br />
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                  <div className="chapterNameMargin">
+                    ₹{cl.price}
+                  </div>
+                  <div className="chapterNameMargin">
+                    <Rating initialRating={cl.rating}
+                      readonly
+                      emptySymbol="bx bx-star"
+                      fullSymbol="bx bxs-star"
+                      fractions={2}
+
+                    />
+                  </div>
+                </div>
+              </Link>
             </div>
-            </Link>
-          </div>
           })}
         </div>
       </div>
