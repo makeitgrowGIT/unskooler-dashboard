@@ -36,6 +36,24 @@ export class ChapterService{
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
+    public async deleteChapter(chapterID: string){
+        try {
+            await this.chapterDB.doc(chapterID).delete()
+            return { "success": true, "message": "Chapter deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete Chapter: " + error }
+        }
+
+    }
+    public async deleteModuleID(chapterID: string, moduleID: string){
+        try {
+            await this.chapterDB.doc(chapterID).update({"moduleIDs" : firebase.firestore.FieldValue.arrayRemove(moduleID) })
+            return { "success": true, "message": "Subject deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete Subject: " + error }
+        }
+
+    }
 
 
 }

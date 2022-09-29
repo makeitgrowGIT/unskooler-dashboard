@@ -42,4 +42,24 @@ export class SubjectService{
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
+    public async deleteSubject(subjectID: string){
+        try {
+            await this.subjectDB.doc(subjectID).delete()
+            return { "success": true, "message": "Subject deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete Subject: " + error }
+        }
+
+    }
+    public async deleteChapterID(subjectID: string,chapterID: string){
+        try {
+            await this.subjectDB.doc(subjectID).update({"chapterIDs" : firebase.firestore.FieldValue.arrayRemove(chapterID) })
+            return { "success": true, "message": "Subject deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete Subject: " + error }
+        }
+
+    }
+
+
 }

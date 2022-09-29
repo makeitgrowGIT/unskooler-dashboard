@@ -27,4 +27,13 @@ export class ModuleService{
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
+    public async deleteModule(moduleID: string){
+        try {
+            await this.moduleDb.doc(moduleID).delete()
+            return { "success": true, "message": "Chapter deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete Chapter: " + error }
+        }
+
+    }
 }

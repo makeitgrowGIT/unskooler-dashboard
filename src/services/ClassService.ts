@@ -78,5 +78,14 @@ export class ClassService {
         }
 
     }
+    public async deleteSubjectID(ClassID:string, subjectID: string){
+        try {
+            await this.classDB.doc(ClassID).update({"subjectIDs" : firebase.firestore.FieldValue.arrayRemove(subjectID) })
+            return { "success": true, "message": "Subject deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to Subject : " + error }
+        }
+
+    }
 
 }
