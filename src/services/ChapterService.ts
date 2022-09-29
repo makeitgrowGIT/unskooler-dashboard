@@ -10,7 +10,7 @@ export class ChapterService{
     public async  getAllChapters (){
         var chapters: Array<Chapter> =[];
         //console.log("Retrivig Classes from Db for: ");
-        var snapschots = await this.chapterDB.get();
+        var snapschots = await this.chapterDB.orderBy("name").get();
         //console.log(snapschots.docs);
         snapschots.docs.forEach(element => {
             //console.log(element.data());

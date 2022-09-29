@@ -19,6 +19,10 @@ const Subject = () => {
   const [boards, setboards] = useState([])
   const [classes, setclasses] = useState(new Map())
   const [loading, setloading] = useState(false)
+  const [updateSubjectObj, setupdateSubjectObj] = useState(null)
+  const [mode, setmode] = useState("submit")
+  const [updateSubjectID, setupdateSubjectID] = useState("")
+  const [allClasses, setallClasses] = useState(["tets"])
   const subjectService = new SubjectService();
   function loadSubjects() {
     subjectService.getAllSubjects().then((subs) => {
@@ -60,15 +64,18 @@ const Subject = () => {
     var classService = new ClassService();
     var temp_boards = await boardService.getAllBoards();
     var temp_mapping = new Map()
+    var allClass = []
     for (let index = 0; index < temp_boards.length; index++) {
       const board = temp_boards[index];
       console.log("board")
       console.log(board.boardID)
       var tempC_Claases = await classService.getClassByBoardID(board.boardID)
+      allClass = allClass.concat(tempC_Claases)
       temp_mapping.set(board.boardID, tempC_Claases)
 
     }
     // console.log(temp_boards)
+    setallClasses(allClass)
     setboards(temp_boards)
     setclasses(temp_mapping)
   }
@@ -120,6 +127,45 @@ const Subject = () => {
     }
   }
 
+  async function updateSubject(e){
+    e.preventDefault()
+    setloading(true)
+    var subjectObj = {
+      "boardID": classboardID,
+      "name": subjectName,
+      "summary":subjectSummary,
+      // "price": Number.parseFloat(classPrice)
+    }
+    console.table(subjectObj)
+    subjectService.updateSubject(updateSubjectID, subjectObj).then((res) => {
+      if (res.success) {
+
+        loadSubjects()
+        setloading(false)
+        setmodal(false)
+        setsubjectName("")
+        setsubjectSummary("")
+        setsubjectThumbnailURl("")
+        setclassID("")
+        setimageFile(null)
+        setboardID("CBSE")
+
+      }
+    })
+
+  }
+
+  function submitForm(e){
+    if (mode == "submit") {
+      console.log("Submitting")
+      addSubject(e)
+    }
+    else {
+      console.log("Updating")
+      updateSubject(e)
+    }
+  }
+
   return (
     <>
     <div className="notForMobile">
@@ -133,7 +179,7 @@ const Subject = () => {
               Add Subject
             </ModalHeader>
             <ModalBody>
-              <form onSubmit={addSubject}>
+              <form onSubmit={submitForm}>
                 <Row>
                   <div>
                     <label htmlFor="name">Subject name</label>
@@ -142,6 +188,7 @@ const Subject = () => {
                       className="form-control"
                       placeholder="Enter name"
                       required
+                      defaultValue={subjectName}
                       onChange={(e) => { setsubjectName(e.target.value) }}
                     ></input>
                   </div>
@@ -153,10 +200,12 @@ const Subject = () => {
                       className="form-control"
                       placeholder="Enter Summary"
                       required
+                      defaultValue={subjectSummary}
                       onChange={(e) => { setsubjectSummary(e.target.value) }}
                     ></input>
                   </div>
-                  <div>
+                  
+                  {mode == "submit" ? <div>
                     <label htmlFor="name">Thumbnail Image</label>
                     <input
                       type="File"
@@ -164,22 +213,24 @@ const Subject = () => {
                       placeholder="Enter URL"
                       required
                       accept="image/png, image/jpeg"
+                      defaultValue={imageFile}
                       onChange={readFilePath}
                     ></input>
-                  </div><br />
-                  <div>
+                  </div> : <br />}
+                  {mode == "submit" ? <div>
                     <label htmlFor="boards">Select Board</label>
                     <select
                       type="select"
                       className="form-control"
                       required
                       placeholder="Enter name"
+                      defaultValue={classboardID}
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
                       <option>Select Board</option>
                       {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs?br.classIDs.length:0} Courses)</option> })}
                     </select>
-                  </div><br />
+                  </div>:<br />}<br />
                   <div>
                     <label htmlFor="boards">Select Class</label>
                     <select
@@ -187,6 +238,7 @@ const Subject = () => {
                       className="form-control"
                       required
                       placeholder="Enter name"
+                      defaultValue={classID}
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
                       <option>Select Class</option>
@@ -194,11 +246,11 @@ const Subject = () => {
                     </select>
                   </div><br />
                 </Row><br /><br />
-                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? <i class='bx bx-loader bx-spin'></i> : "Sumbit"}</button>
+                <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? <i class='bx bx-loader bx-spin'></i> : mode == "submit" ? "Sumbit" : "Update"}</button>
               </form>
             </ModalBody>
           </Modal>
-          <button className="addInstructor" onClick={() => setmodal(true)}>
+          <button className="addInstructor" onClick={() => {setmode("submit"); setmodal(true)}}>
             Add Subject
           </button>
         </div>
@@ -207,8 +259,20 @@ const Subject = () => {
       <div className="subjectColumn">
         {subjects.map((sub) => {
           return <div className="item">
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
             <div className="chapterNameMargin">
               <h5>{sub.name}</h5>
+            </div>
+            <i class='bx bxs-edit' onClick={async () => {
+                  setmode("update");
+                  setsubjectName(sub.name)
+                  setsubjectSummary(sub.summary)
+                  setclassID(sub.classID)
+                  setboardID(allClasses.filter((e)=>(e.classID==sub.classID))[0].boardID)
+                  setupdateSubjectObj(sub)
+                  setmodal(true);
+                  setupdateSubjectID(sub.subjectID)
+                }} style={{ cursor: "pointer" }}></i>
             </div>
             <div className="chapterNameMargin" style={{ marginBottom: '0px', fontSize: "0.5rem" }}>
               <h6>{sub.summary}</h6>

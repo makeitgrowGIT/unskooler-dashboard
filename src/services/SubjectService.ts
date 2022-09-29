@@ -33,4 +33,13 @@ export class SubjectService{
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
+    
+    public async updateSubject(subjectID: string, sub: Subject){
+        try {
+            await this.subjectDB.doc(subjectID).update(sub)
+            return { "success": true, "message": "subject Updated" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
+    }
 }
