@@ -261,7 +261,7 @@ const Chapter = () => {
       </div>
 
       <div className="subjectColumn">
-        {chapters.filter((val) => { return id == "all" ? true : val.subjectID === id }).sort((s1,s2)=>{return s1.index>s2.index}).map((ch) => {
+        {chapters.filter((val) => { return id == "all" ? true : val.subjectID === id }).sort((s1,s2)=>{return s1.index-s2.index}).map((ch) => {
           return <div className="item">
             <div className="chapterNameMargin">
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>

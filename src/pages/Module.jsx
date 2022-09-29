@@ -456,7 +456,7 @@ const Module = () => {
       </div>
 
       <div className="subjectColumn">
-        {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1,s2)=>{return s1.index<s2.index}).map((md) => {
+        {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1,s2)=>{return s1.index-s2.index}).map((md) => {
           return <div className="item">
             <div className="chapterNameMargin">
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>

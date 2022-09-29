@@ -54,6 +54,15 @@ export class ChapterService{
         }
 
     }
+    
+    public async updateChapter(chapterID: string, chap: Chapter){
+        try {
+            await this.chapterDB.doc(chapterID).update(chap)
+            return { "success": true, "message": "subject Updated" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to add class: " + error }
+        }
+    }
 
 
 }
