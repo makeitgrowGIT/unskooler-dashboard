@@ -269,7 +269,6 @@ const Class = () => {
                   boardService.deleteCassID(deleteObj.boardID, deleteObj.classID).then((res) => {
 
                     classService.deleteClass(deleteObj.classID).then((res) => {
-                      boardService.deleteCassID()
                       setloading(false)
                       setdeleteModal(false)
                       loadCBSEClasses()

@@ -1,6 +1,6 @@
 import { async } from "@firebase/util";
 import React, { useEffect, useState } from "react";
-import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Button, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import { Convert } from "../models/Chapter";
 import { BoardService } from "../services/BoardService";
 import { ChapterService } from "../services/ChapterService";
@@ -27,6 +27,8 @@ const Chapter = () => {
   const [chapterSummary, setchapterSummary] = useState("")
   const [index, setindex] = useState(0)
   const [loading, setloading] = useState(false)
+  const [deleteObj, setdeleteObj] = useState(null)
+  const [deleteModal, setdeleteModal] = useState(false)
   let {id} = useParams()
 
   const instuctorService = new InstructorService()
@@ -230,6 +232,28 @@ const Chapter = () => {
               </form>
             </ModalBody>
           </Modal>
+          
+          <Modal isOpen={deleteModal} toggle={() => setdeleteModal(!deleteModal)}>
+            <ModalHeader toggle={() => setdeleteModal(false)}>
+              Delete Chapter
+            </ModalHeader>
+            <ModalBody>
+              Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
+              <Button onClick={() => {
+                setloading(true)
+                if (deleteObj) {
+                  subjectService.deleteChapterID(deleteObj.subjectID, deleteObj.chapterID).then((res) => {
+
+                    chapterService.deleteChapter(deleteObj.chapterID).then((res) => {
+                      setloading(false)
+                      setdeleteModal(false)
+                      initialLoad()
+                    })
+                  })
+                }
+              }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
+            </ModalBody>
+          </Modal>
           <button className="addInstructor" onClick={() => setmodal(true)}>
             Add Chapter
           </button>
@@ -240,7 +264,13 @@ const Chapter = () => {
         {chapters.filter((val) => { return id == "all" ? true : val.subjectID === id }).sort((s1,s2)=>{return s1.index>s2.index}).map((ch) => {
           return <div className="item">
             <div className="chapterNameMargin">
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
               <h5 >{ch.name}</h5>
+              <i class='bx bxs-trash' onClick={async () => {
+                  setdeleteModal(true);
+                  setdeleteObj(ch)
+                }} style={{ cursor: "pointer" }}></i>
+              </div>
               <h6 >{ch.summary}</h6>
               <h7 >{ch.moduleIDs.length} Modules</h7>
             </div>

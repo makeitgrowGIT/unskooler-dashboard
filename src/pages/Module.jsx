@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Button, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import '../pages/module.css'
 import { BoardService } from "../services/BoardService";
 import { ChapterService } from "../services/ChapterService";
@@ -50,6 +50,8 @@ const Module = () => {
   const [loadingMessage, setloadingMessage] = useState("<i class='bx bx-loader bx-spin'></i>")
   const [pecent, setpecent] = useState(0)
   const [loading, setloading] = useState(false)
+  const [deleteObj, setdeleteObj] = useState(null)
+  const [deleteModal, setdeleteModal] = useState(false)
 
 
   const moduleService = new ModuleService();
@@ -426,7 +428,27 @@ const Module = () => {
               </form>
             </ModalBody>
           </Modal>
-          
+          <Modal isOpen={deleteModal} toggle={() => setdeleteModal(!deleteModal)}>
+            <ModalHeader toggle={() => setdeleteModal(false)}>
+              Delete Module
+            </ModalHeader>
+            <ModalBody>
+              Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
+              <Button onClick={() => {
+                setloading(true)
+                if (deleteObj) {
+                  chapterService.deleteModuleID(deleteObj.chapterID, deleteObj.moduleID).then((res) => {
+
+                    moduleService.deleteModule(deleteObj.moduleID).then((res) => {
+                      setloading(false)
+                      setdeleteModal(false)
+                      initialLoad()
+                    })
+                  })
+                }
+              }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
+            </ModalBody>
+          </Modal>
           <button className="addInstructor" onClick={() => setmodal(true)}>
             Add Module
           </button>
@@ -437,7 +459,13 @@ const Module = () => {
         {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1,s2)=>{return s1.index<s2.index}).map((md) => {
           return <div className="item">
             <div className="chapterNameMargin">
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
               <h5 >{md.name}</h5>
+              <i class='bx bxs-trash' onClick={async () => {
+                  setdeleteModal(true);
+                  setdeleteObj(md)
+                }} style={{ cursor: "pointer" }}></i>
+              </div>
               <h6 >{Math.floor( md.durationInSeconds/60) }:{md.durationInSeconds%60} Mins</h6>
               <>
               <h8>{md.notes.length} Notes,</h8><h8> {md.assignments.length} Assigments</h8>

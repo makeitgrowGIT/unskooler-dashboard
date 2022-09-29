@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Button, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import { Convert } from "../models/Subject";
 import '../pages/subject.css'
 import { BoardService } from "../services/BoardService";
@@ -27,8 +27,12 @@ const Subject = () => {
   const [mode, setmode] = useState("submit")
   const [updateSubjectID, setupdateSubjectID] = useState("")
   const [allClasses, setallClasses] = useState(["tets"])
+  const [deleteObj, setdeleteObj] = useState(null)
+  const [deleteModal, setdeleteModal] = useState(false)
   let { id } = useParams();
   const subjectService = new SubjectService();
+  var boardService = new BoardService();
+  var classService = new ClassService();
   function loadSubjects() {
     subjectService.getAllSubjects().then((subs) => {
       setsubjects(subs);
@@ -65,8 +69,6 @@ const Subject = () => {
   }
 
   async function loadClassesAndBoards() {
-    var boardService = new BoardService();
-    var classService = new ClassService();
     var temp_boards = await boardService.getAllBoards();
     var temp_mapping = new Map()
     var allClass = []
@@ -255,6 +257,28 @@ const Subject = () => {
               </form>
             </ModalBody>
           </Modal>
+          
+          <Modal isOpen={deleteModal} toggle={() => setdeleteModal(!deleteModal)}>
+            <ModalHeader toggle={() => setdeleteModal(false)}>
+              Delete Subject
+            </ModalHeader>
+            <ModalBody>
+              Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
+              <Button onClick={() => {
+                setloading(true)
+                if (deleteObj) {
+                  classService.deleteSubjectID(deleteObj.classID, deleteObj.subjectID).then((res) => {
+
+                    subjectService.deleteSubject(deleteObj.subjectID).then((res) => {
+                      setloading(false)
+                      setdeleteModal(false)
+                      loadSubjects()
+                    })
+                  })
+                }
+              }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
+            </ModalBody>
+          </Modal>
           <button className="addInstructor" onClick={() => { setmode("submit"); setmodal(true) }}>
             Add Subject
           </button>
@@ -278,6 +302,10 @@ const Subject = () => {
                 setmodal(true);
                 setupdateSubjectID(sub.subjectID)
               }} style={{ cursor: "pointer" }}></i>
+              <i class='bx bxs-trash' onClick={async () => {
+                  setdeleteModal(true);
+                  setdeleteObj(sub)
+                }} style={{ cursor: "pointer" }}></i>
             </div>
             <div className="chapterNameMargin" style={{ marginBottom: '0px', fontSize: "0.5rem" }}>
               <h6>{sub.summary}</h6>
