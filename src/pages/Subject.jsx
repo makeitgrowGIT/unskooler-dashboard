@@ -6,7 +6,11 @@ import { BoardService } from "../services/BoardService";
 import { ClassService } from "../services/ClassService";
 import { SubjectService } from "../services/SubjectService";
 import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
+import {
+  useParams
+} from "react-router-dom";
 
+import { Link } from 'react-router-dom'
 const Subject = () => {
   const [modal, setmodal] = useState(false);
   const [subjects, setsubjects] = useState([]);
@@ -23,6 +27,7 @@ const Subject = () => {
   const [mode, setmode] = useState("submit")
   const [updateSubjectID, setupdateSubjectID] = useState("")
   const [allClasses, setallClasses] = useState(["tets"])
+  let { id } = useParams();
   const subjectService = new SubjectService();
   function loadSubjects() {
     subjectService.getAllSubjects().then((subs) => {
@@ -127,13 +132,13 @@ const Subject = () => {
     }
   }
 
-  async function updateSubject(e){
+  async function updateSubject(e) {
     e.preventDefault()
     setloading(true)
     var subjectObj = {
       "boardID": classboardID,
       "name": subjectName,
-      "summary":subjectSummary,
+      "summary": subjectSummary,
       // "price": Number.parseFloat(classPrice)
     }
     console.table(subjectObj)
@@ -155,7 +160,7 @@ const Subject = () => {
 
   }
 
-  function submitForm(e){
+  function submitForm(e) {
     if (mode == "submit") {
       console.log("Submitting")
       addSubject(e)
@@ -168,9 +173,9 @@ const Subject = () => {
 
   return (
     <>
-    <div className="notForMobile">
-      <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
-    </div>
+      <div className="notForMobile">
+        <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
+      </div>
       <div className="pageHeadingDiv">
         <h2 className="coursesChild">Courses {">"} Class {">"}&nbsp;<span className="coursePath">Subject</span></h2>
         <div>
@@ -204,7 +209,7 @@ const Subject = () => {
                       onChange={(e) => { setsubjectSummary(e.target.value) }}
                     ></input>
                   </div>
-                  
+
                   {mode == "submit" ? <div>
                     <label htmlFor="name">Thumbnail Image</label>
                     <input
@@ -228,9 +233,9 @@ const Subject = () => {
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
                       <option>Select Board</option>
-                      {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs?br.classIDs.length:0} Courses)</option> })}
+                      {boards.map((br) => { return <option value={br.boardID} >{br.name}({br.classIDs ? br.classIDs.length : 0} Courses)</option> })}
                     </select>
-                  </div>:<br />}<br />
+                  </div> : <br />}<br />
                   <div>
                     <label htmlFor="boards">Select Class</label>
                     <select
@@ -250,37 +255,39 @@ const Subject = () => {
               </form>
             </ModalBody>
           </Modal>
-          <button className="addInstructor" onClick={() => {setmode("submit"); setmodal(true)}}>
+          <button className="addInstructor" onClick={() => { setmode("submit"); setmodal(true) }}>
             Add Subject
           </button>
         </div>
       </div>
 
       <div className="subjectColumn">
-        {subjects.map((sub) => {
+        {subjects.filter((val) => { console.log("id"); console.log(id); return id == "all" ? true : val.classID === id }).map((sub) => {
           return <div className="item">
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-            <div className="chapterNameMargin">
-              <h5>{sub.name}</h5>
-            </div>
-            <i class='bx bxs-edit' onClick={async () => {
-                  setmode("update");
-                  setsubjectName(sub.name)
-                  setsubjectSummary(sub.summary)
-                  setclassID(sub.classID)
-                  setboardID(allClasses.filter((e)=>(e.classID==sub.classID))[0].boardID)
-                  setupdateSubjectObj(sub)
-                  setmodal(true);
-                  setupdateSubjectID(sub.subjectID)
-                }} style={{ cursor: "pointer" }}></i>
+              <div className="chapterNameMargin">
+                <h5>{sub.name}</h5>
+              </div>
+              <i class='bx bxs-edit' onClick={async () => {
+                setmode("update");
+                setsubjectName(sub.name)
+                setsubjectSummary(sub.summary)
+                setclassID(sub.classID)
+                setboardID(allClasses.filter((e) => (e.classID == sub.classID))[0].boardID)
+                setupdateSubjectObj(sub)
+                setmodal(true);
+                setupdateSubjectID(sub.subjectID)
+              }} style={{ cursor: "pointer" }}></i>
             </div>
             <div className="chapterNameMargin" style={{ marginBottom: '0px', fontSize: "0.5rem" }}>
               <h6>{sub.summary}</h6>
             </div>
-            <div className="chapterNameMargin" style={{ marginBottom: '0px' }}>
-              <h7>{sub.chapterIDs.length} Chapters</h7>
-            </div>
-            <div className="subjectbgImg1" style={{ backgroundImage: "url(" + sub.thumbnailURL + ")" }}></div>
+            <Link to={"/chapter/" + sub.subjectID}>
+              <div className="chapterNameMargin" style={{ marginBottom: '0px' }}>
+                <h7>{sub.chapterIDs.length} Chapters</h7>
+              </div>
+              <div className="subjectbgImg1" style={{ backgroundImage: "url(" + sub.thumbnailURL + ")" }}></div>
+            </Link>
           </div>
         })}
 

@@ -11,6 +11,8 @@ import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
 import { uploadBytes, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
 import { async } from "@firebase/util";
+import {Link,useParams } from 'react-router-dom'
+
 
 const Module = () => {
   const [modal, setmodal] = useState(false);
@@ -38,6 +40,7 @@ const Module = () => {
   const [notesCount, setnotesCount] = useState("")
   const [notesPaths, setnotesPaths] = useState([])
   const [notesFiles, setnotesFiles] = useState([])
+  let {id} =useParams()
 
   const [assignmetCount, setassignmetCount] = useState("")
   const [assignmetPaths, setassignmetPaths] = useState([])
@@ -431,7 +434,7 @@ const Module = () => {
       </div>
 
       <div className="subjectColumn">
-        {modules.map((md) => {
+        {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1,s2)=>{return s1.index<s2.index}).map((md) => {
           return <div className="item">
             <div className="chapterNameMargin">
               <h5 >{md.name}</h5>

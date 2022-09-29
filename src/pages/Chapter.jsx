@@ -8,6 +8,7 @@ import { ClassService } from "../services/ClassService";
 import { InstructorService } from "../services/InstructorService";
 import { SubjectService } from "../services/SubjectService";
 import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
+import {Link,useParams } from 'react-router-dom'
 
 const Chapter = () => {
   const [modal, setmodal] = useState(false);
@@ -26,6 +27,7 @@ const Chapter = () => {
   const [chapterSummary, setchapterSummary] = useState("")
   const [index, setindex] = useState(0)
   const [loading, setloading] = useState(false)
+  let {id} = useParams()
 
   const instuctorService = new InstructorService()
   const chapterService = new ChapterService()
@@ -235,14 +237,16 @@ const Chapter = () => {
       </div>
 
       <div className="subjectColumn">
-        {chapters.map((ch) => {
+        {chapters.filter((val) => { return id == "all" ? true : val.subjectID === id }).sort((s1,s2)=>{return s1.index>s2.index}).map((ch) => {
           return <div className="item">
             <div className="chapterNameMargin">
               <h5 >{ch.name}</h5>
               <h6 >{ch.summary}</h6>
               <h7 >{ch.moduleIDs.length} Modules</h7>
             </div>
+            <Link to={"/module/"+ch.chapterID}>
             <div className="subjectbgImg1" style={{ backgroundImage: "url(" + ch.thumbnailURL + ")" }}></div>
+            </Link>
           </div>
         })}
 

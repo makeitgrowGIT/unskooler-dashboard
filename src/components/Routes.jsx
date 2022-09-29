@@ -21,9 +21,9 @@ const Routes = () => {
             <Route path='/dashboard' component={Dashboard}/>
             <Route path='/customers' component={Customers}/>
             <Route path='/class' component={Class}/>
-            <Route path='/subject' component={Subject}/>
-            <Route path='/chapter' component={Chapter}/>
-            <Route path='/Module' component={Module}/>
+            <Route path='/subject/:id' component={Subject}/>
+            <Route path='/chapter/:id' component={Chapter}/>
+            <Route path='/module/:id' component={Module}/>
             <Route path='/instructors' component={Instructors}/>
             <Route path='/users' component={Users}/>
             <Route path='/financials' component={Financials}/>

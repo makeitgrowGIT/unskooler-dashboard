@@ -6,17 +6,17 @@
     },
     {
         "display_name": "Subject",
-        "route": "/subject",
+        "route": "/subject/all",
         "icon": "bx bx-user-pin"
     },
     {
         "display_name": "Chapter",
-        "route": "/chapter",
+        "route": "/chapter/all",
         "icon": "bx bx-user-pin"
     },
     {
         "display_name": "Module",
-        "route": "/Module",
+        "route": "/module/all",
         "icon": "bx bx-user-pin"
     },
     {
