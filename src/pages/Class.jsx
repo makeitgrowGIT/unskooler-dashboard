@@ -359,6 +359,10 @@ const Class = () => {
                   setupdateClassObj(cl)
                   setmodal(true);
                 }} style={{ cursor: "pointer" }}></i>
+                <i class='bx bxs-trash' onClick={async () => {
+                  setdeleteModal(true);
+                  setdeleteObj(cl)
+                }} style={{ cursor: "pointer" }}></i>
               </div>
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <div className="chapterNameMargin">
@@ -412,6 +416,10 @@ const Class = () => {
                   setboardID(cl.boardID)
                   setupdateClassObj(cl)
                   setmodal(true);
+                }} style={{ cursor: "pointer" }}></i>
+                <i class='bx bxs-trash' onClick={async () => {
+                  setdeleteModal(true);
+                  setdeleteObj(cl)
                 }} style={{ cursor: "pointer" }}></i>
               </div>
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
