@@ -60,7 +60,7 @@ const Class = () => {
     var unsService = new UnskoolerHelperService()
     //console.log("FileName")
     //console.log(imageFile.name)
-    var responseObj = await unsService.uploadFile(imageFile)
+    var responseObj = await unsService.uploadFile(imageFile,class_id)
     //console.log("responseObj")
     //console.log(responseObj)
     if (responseObj.success) {
@@ -155,8 +155,8 @@ const Class = () => {
         setclassPicPath(reader.result)
       }
     }
-    if (event.target.files[0].size > 250000) {
-      alert("Image is too big! Must be less Than 250kb");
+    if (event.target.files[0].size > 50000000) {
+      alert("Image is too big! Must be less Than 50MB");
       setclassPicPath()
     }
     else {

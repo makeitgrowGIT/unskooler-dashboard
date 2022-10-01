@@ -4,11 +4,12 @@ import { uploadBytes, ref, uploadBytesResumable, getDownloadURL } from "firebase
 
 export class UnskoolerHelperService {
 
-    async uploadFile(file: File) {
+    async uploadFile(file: File, name:string) {
         //This Method will upload given file to fireabse clous storage and return the downloadURL
         try {
             console.log("Uploading : "+file.name)
-            var uploadname = file.name
+            var uploadname = name+"."+file.name.split(".").at(file.name.split(".").length-1)
+            console.log("Uploading : "+uploadname)
             var firebaseStorageRef = ref(storage, uploadname)
             var res = await uploadBytes(firebaseStorageRef, file)
             var pathRef = storage.ref(uploadname)

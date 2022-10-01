@@ -72,7 +72,7 @@ const Chapter = () => {
     classService.addSearchTags(classID, searchTags)
     //upload image 
     var unsService = new UnskoolerHelperService()
-    var responseObj = await unsService.uploadFile(imageFile)
+    var responseObj = await unsService.uploadFile(imageFile,chapter_id)
     if (responseObj.success) {
       //create obj
       let chapter = {

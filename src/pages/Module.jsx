@@ -103,7 +103,7 @@ const Module = () => {
     await chapterService.addModuleID(chapterID, module_id)
     //Upload thumbnail
     setloadingMessage("Uploading Thumbnail...")
-    let thmbURL = await unskService.uploadFile(imageFile)
+    let thmbURL = await unskService.uploadFile(imageFile,module_id)
 
 
     //For Notes:
@@ -112,7 +112,7 @@ const Module = () => {
     notesFiles.forEach(async (element) => {
       if (element) {
         setloadingMessage(`Uploading Notes ${c + 1}/${notesFiles.length}`)
-        let pdfURLA = await unskService.uploadFile(element)
+        let pdfURLA = await unskService.uploadFile(element,element.name)
         c++
         if (pdfURLA.success) {
           notesURL.push(pdfURLA.object)
@@ -130,7 +130,7 @@ const Module = () => {
     assignmetFiles.forEach(async (element) => {
       if (element) {
         setloadingMessage(`Uploading Assignemnets ${ca + 1}/${notesFiles.length}`)
-        let pdfURLA = await unskService.uploadFile(element)
+        let pdfURLA = await unskService.uploadFile(element,element.name)
         ca++
         if (pdfURLA.success) {
           assigmentUrls.push(pdfURLA.object)

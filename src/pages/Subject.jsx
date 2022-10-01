@@ -103,7 +103,7 @@ const Subject = () => {
     await classService.addSubjectID(classID, subjectID)
     //Upload Thumbnail
     var unsService = new UnskoolerHelperService()
-    var responseObj = await unsService.uploadFile(imageFile)
+    var responseObj = await unsService.uploadFile(imageFile,subjectID)
     if (responseObj.success) {
       //Create Subject class
       var SubjectObj = {
