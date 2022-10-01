@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Button, Card, CloseButton, Modal, ModalBody, ModalFooter, ModalHeader, Row, Toast, ToastBody } from "reactstrap";
 import '../pages/module.css'
 import { BoardService } from "../services/BoardService";
 import { ChapterService } from "../services/ChapterService";
@@ -11,7 +11,7 @@ import { UnskoolerHelperService } from "../services/UnskoolerHelperService";
 import { uploadBytes, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
 import { async } from "@firebase/util";
-import {Link,useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 
 const Module = () => {
@@ -40,7 +40,7 @@ const Module = () => {
   const [notesCount, setnotesCount] = useState("")
   const [notesPaths, setnotesPaths] = useState([])
   const [notesFiles, setnotesFiles] = useState([])
-  let {id} =useParams()
+  let { id } = useParams()
 
   const [assignmetCount, setassignmetCount] = useState("")
   const [assignmetPaths, setassignmetPaths] = useState([])
@@ -52,6 +52,8 @@ const Module = () => {
   const [loading, setloading] = useState(false)
   const [deleteObj, setdeleteObj] = useState(null)
   const [deleteModal, setdeleteModal] = useState(false)
+  const [focusedModuleObj, setfocusedModuleObj] = useState(null)
+  const [isFocused, setisFocused] = useState(false)
 
 
   const moduleService = new ModuleService();
@@ -103,13 +105,13 @@ const Module = () => {
     setloadingMessage("Uploading Thumbnail...")
     let thmbURL = await unskService.uploadFile(imageFile)
 
-    
+
     //For Notes:
     let notesURL = []
     let c = 0
-    notesFiles.forEach( async (element) =>{
+    notesFiles.forEach(async (element) => {
       if (element) {
-        setloadingMessage(`Uploading Notes ${c+1}/${notesFiles.length}`)
+        setloadingMessage(`Uploading Notes ${c + 1}/${notesFiles.length}`)
         let pdfURLA = await unskService.uploadFile(element)
         c++
         if (pdfURLA.success) {
@@ -121,13 +123,13 @@ const Module = () => {
       }
     });
     console.log(notesURL)
-    
+
     //For Assignments:
     let assigmentUrls = []
     let ca = 0
-    assignmetFiles.forEach( async (element) =>{
+    assignmetFiles.forEach(async (element) => {
       if (element) {
-        setloadingMessage(`Uploading Assignemnets ${ca+1}/${notesFiles.length}`)
+        setloadingMessage(`Uploading Assignemnets ${ca + 1}/${notesFiles.length}`)
         let pdfURLA = await unskService.uploadFile(element)
         ca++
         if (pdfURLA.success) {
@@ -139,7 +141,7 @@ const Module = () => {
       }
     });
     console.log(assigmentUrls)
-    
+
     var duration = 0;
     var video = document.createElement('video');
     video.preload = 'metadata';
@@ -180,7 +182,7 @@ const Module = () => {
         "name": moduleName,
         "thumbnailURL": thmbURL.object,
         "notes": notesURL,
-        "assignments":assigmentUrls,
+        "assignments": assigmentUrls,
         "videoURL": downloadURl
       }
       console.log(moduleObj)
@@ -192,6 +194,9 @@ const Module = () => {
         setnotesCount("")
         setnotesFiles([])
         setnotesPaths([])
+        setassignmetCount("")
+        setassignmetFiles([])
+        setassignmetPaths([])
       }
       )
     })
@@ -212,14 +217,14 @@ const Module = () => {
 
   }
 
-  const readURLFilePaths = (event, setPathsFunction,pathList, setFilesFunction,fileList) => {
-    console.log(pathList,fileList)
-    console.log(typeof(pathList),typeof(fileList))
+  const readURLFilePaths = (event, setPathsFunction, pathList, setFilesFunction, fileList) => {
+    console.log(pathList, fileList)
+    console.log(typeof (pathList), typeof (fileList))
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState === 2) {
         let tempPaths = pathList
-        tempPaths.push( reader.result)
+        tempPaths.push(reader.result)
         setPathsFunction(tempPaths)
       }
     }
@@ -242,9 +247,9 @@ const Module = () => {
               Add Module
             </ModalHeader>
             <ModalBody style={{
-      maxHeight: 'calc(100vh - 210px)',
-      overflowY: 'auto'
-     }}>
+              maxHeight: 'calc(100vh - 210px)',
+              overflowY: 'auto'
+            }}>
               <form onSubmit={addModule}>
                 <Row>
                   <div>
@@ -252,7 +257,7 @@ const Module = () => {
                     <input
                       type="text"
                       className="form-control"
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       placeholder="Enter name"
                       onChange={(e) => { setmoduleName(e.target.value) }}
                     ></input>
@@ -263,7 +268,7 @@ const Module = () => {
                     <input
                       type="number"
                       className="form-control"
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       placeholder="Enter index"
                       onChange={(e) => { setmoduleIndex(e.target.value) }}
                     ></input>
@@ -274,7 +279,7 @@ const Module = () => {
                     <select
                       type="text"
                       className="form-control"
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setboardID(e.target.value) }}
                     >
@@ -288,7 +293,7 @@ const Module = () => {
                     <select
                       type="text"
                       className="form-control"
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       placeholder="Enter Chapter Summary"
                       onChange={(e) => { setclassID(e.target.value) }}
                     >
@@ -304,7 +309,7 @@ const Module = () => {
                       className="form-control"
                       placeholder="Enter Chapter Summary"
                       required
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       onChange={(e) => { setsubjecID(e.target.value) }}
                     >
                       <option>Select Subject</option>
@@ -319,7 +324,7 @@ const Module = () => {
                       className="form-control"
                       placeholder="Enter Chapter Summary"
                       required
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       defaultValue={chapters.length > 0 ? chapters[0].chapterID : ""}
                       onChange={(e) => { setchapterID(e.target.value) }}
                     >
@@ -335,7 +340,7 @@ const Module = () => {
                       className="form-control"
                       placeholder="Enter name"
                       required
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       accept="image/png, image/jpeg"
                       onChange={(e) => { readURLFilePath(e, setclassPicPath, setimageFile) }}
                     ></input>
@@ -366,7 +371,7 @@ const Module = () => {
                             placeholder="Enter name"
                             style={{ "marginBottom": "10px", "marginTop": "10px" }}
                             required
-                            onChange={(e) => { readURLFilePaths(e, setnotesPaths,notesPaths, setnotesFiles,notesFiles) }}
+                            onChange={(e) => { readURLFilePaths(e, setnotesPaths, notesPaths, setnotesFiles, notesFiles) }}
                           ></input>
                         }
 
@@ -400,7 +405,7 @@ const Module = () => {
                             placeholder="Enter name"
                             style={{ "marginBottom": "10px", "marginTop": "10px" }}
                             required
-                            onChange={(e) => { readURLFilePaths(e, setassignmetPaths,assignmetPaths, setassignmetFiles,assignmetFiles) }}
+                            onChange={(e) => { readURLFilePaths(e, setassignmetPaths, assignmetPaths, setassignmetFiles, assignmetFiles) }}
                           ></input>
                         }
 
@@ -415,14 +420,14 @@ const Module = () => {
                       type="file"
                       className="form-control"
                       placeholder="Enter name"
-                      style={{ "marginBottom": "20px"}}
+                      style={{ "marginBottom": "20px" }}
                       accept="video/mp4,video/x-m4v,video/*"
                       onChange={(e) => { readURLFilePath(e, setvideoPath, setvideoFile) }}
                     ></input>
                   </div>
-                  <button 
-                      style={{ "marginBottom": "20px"}}
-                      className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? loadingMessage : "Sumbit"}</button>
+                  <button
+                    style={{ "marginBottom": "20px" }}
+                    className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? loadingMessage : "Sumbit"}</button>
 
                 </Row>
               </form>
@@ -433,7 +438,7 @@ const Module = () => {
               Delete Module
             </ModalHeader>
             <ModalBody>
-              Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
+              Are you sure you want to delete {deleteObj ? deleteObj.name : ""}?<br></br>
               <Button onClick={() => {
                 setloading(true)
                 if (deleteObj) {
@@ -449,6 +454,70 @@ const Module = () => {
               }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
             </ModalBody>
           </Modal>
+          <Modal size="lg" isOpen={isFocused} toggle={() => setisFocused(!isFocused)}  >
+            <ModalHeader>{focusedModuleObj ? focusedModuleObj.name : null}</ModalHeader>
+            <ModalBody style={{
+              maxHeight: 'calc(100vh - 210px)',
+              overflowY: 'auto'
+            }}>
+              <div style={{ "padding": "20px" }}>
+                <video width="720" controls>
+                  <source src={focusedModuleObj ? focusedModuleObj.videoURL : null}></source>
+                </video>
+                <hr />
+                <h5>Assignments</h5>
+                <div>
+                  {focusedModuleObj ? focusedModuleObj.assignments.map((as, idx) => {
+                    return <Toast style={{ marginBottom: "20px" }}>
+                      <ToastBody style={{ "display": "flex", "flexDirection": "row", "justifyContent": "space-between" }}>
+                        <h6>Assigment {idx + 1} </h6>
+                        <a href={as} target="_blank">
+                          <i class='bx bx-link-external' style={{ cursor: "pointer" }}></i>
+                        </a>
+                        <CloseButton onClick={() => {
+                          if (focusedModuleObj) {
+                            console.log(focusedModuleObj.moduleID, as, "assignments")
+                            moduleService.deleteArrayEnry(focusedModuleObj.moduleID, as, "assignments").then((res) => {
+                              console.log(res)
+                              focusedModuleObj.assignments.pop(as);
+                              setfocusedModuleObj(focusedModuleObj)
+                              initialLoad()
+                            });
+                          }
+                        }} />
+                      </ToastBody>
+                    </Toast>
+                  }) : <></>}
+                </div>
+                <hr />
+                <h5>Notes</h5>
+                <div>
+                  {focusedModuleObj ? focusedModuleObj.notes.map((as, idx) => {
+                    return <Toast style={{ marginBottom: "20px" }}>
+                      <ToastBody style={{ "display": "flex", "flexDirection": "row", "justifyContent": "space-between" }}>
+                        <h6>Notes {idx + 1} </h6>
+                        <a href={as} target="_blank">
+                          <i class='bx bx-link-external' style={{ cursor: "pointer" }}></i>
+                        </a>
+                        <CloseButton onClick={() => {
+                          if (focusedModuleObj) {
+                            console.log(focusedModuleObj.moduleID, as, "notes")
+                            moduleService.deleteArrayEnry(focusedModuleObj.moduleID, as, "notes").then((res) => {
+                              console.log(res)
+                              focusedModuleObj.notes.pop(as);
+                              setfocusedModuleObj(focusedModuleObj)
+                              initialLoad()
+                            });
+                          }
+                        }} />
+                      </ToastBody>
+                    </Toast>
+                  }) : <></>}
+                </div>
+              </div>
+            </ModalBody>
+            <ModalFooter>Unskooler Property</ModalFooter>
+          </Modal>
           <button className="addInstructor" onClick={() => setmodal(true)}>
             Add Module
           </button>
@@ -456,22 +525,25 @@ const Module = () => {
       </div>
 
       <div className="subjectColumn">
-        {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1,s2)=>{return s1.index-s2.index}).map((md) => {
+        {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1, s2) => { return s1.index - s2.index }).map((md) => {
           return <div className="item">
             <div className="chapterNameMargin">
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <h5 >{md.name}</h5>
-              <i class='bx bxs-trash' onClick={async () => {
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <h5 >{md.name}</h5>
+                <i class='bx bxs-trash' onClick={async () => {
                   setdeleteModal(true);
                   setdeleteObj(md)
                 }} style={{ cursor: "pointer" }}></i>
               </div>
-              <h6 >{Math.floor( md.durationInSeconds/60) }:{md.durationInSeconds%60} Mins</h6>
+              <h6 >{Math.floor(md.durationInSeconds / 60)}:{md.durationInSeconds % 60} Mins</h6>
               <>
-              <h8>{md.notes.length} Notes,</h8><h8> {md.assignments.length} Assigments</h8>
+                <h8>{md.notes.length} Notes,</h8><h8> {md.assignments.length} Assigments</h8>
               </>
             </div>
-            <div className="subjectbgImg1" style={{ backgroundImage: "url(" + md.thumbnailURL + ")" }}></div>
+            <div className="subjectbgImg1" style={{ backgroundImage: "url(" + md.thumbnailURL + ")" }} onClick={() => {
+              setfocusedModuleObj(md)
+              setisFocused(true)
+            }}></div>
           </div>
         })}
       </div>

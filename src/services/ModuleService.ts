@@ -1,3 +1,4 @@
+import firebase from "firebase/compat";
 import { db } from "../firebaseConfig";
 import { Convert } from "../models/Module";
 import { Module } from "../models/Module";
@@ -31,6 +32,15 @@ export class ModuleService{
         try {
             await this.moduleDb.doc(moduleID).delete()
             return { "success": true, "message": "Chapter deleted" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to delete Chapter: " + error }
+        }
+
+    }
+    public async deleteArrayEnry(moduleID: string,enrty:string, arrayName1: string){
+        try {
+            await  this.moduleDb.doc(moduleID).update({[arrayName1] : firebase.firestore.FieldValue.arrayRemove(enrty) })
+            return { "success": true, "message": " deleted" }
         } catch (error) {
             return { "success": false, "message": "Unable to delete Chapter: " + error }
         }
