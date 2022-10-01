@@ -481,6 +481,7 @@ const Module = () => {
                               console.log(res)
                               focusedModuleObj.assignments.pop(as);
                               setfocusedModuleObj(focusedModuleObj)
+                              setisFocused(false)
                               initialLoad()
                             });
                           }
