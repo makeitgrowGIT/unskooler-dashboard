@@ -197,6 +197,9 @@ const Module = () => {
         setassignmetCount("")
         setassignmetFiles([])
         setassignmetPaths([])
+        setvideoFile(null)
+        setvideoURL("")
+        setvideoURL(null)
       }
       )
     })
@@ -422,6 +425,8 @@ const Module = () => {
                       placeholder="Enter name"
                       style={{ "marginBottom": "20px" }}
                       accept="video/mp4,video/x-m4v,video/*"
+                      required
+                      defaultValue={null}
                       onChange={(e) => { readURLFilePath(e, setvideoPath, setvideoFile) }}
                     ></input>
                   </div>
