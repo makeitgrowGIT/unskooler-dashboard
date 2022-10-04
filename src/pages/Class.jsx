@@ -22,6 +22,7 @@ const Class = () => {
   const [imageFile, setimageFile] = useState(null)
   const [classPrice, setclassPrice] = useState(0)
   const [boardID, setboardID] = useState("CBSE");
+  const [prevboardID, setprevboardID] = useState("");
   const [boards, setboards] = useState([]);
   const [loading, setloading] = useState(false)
   const [mode, setmode] = useState("submit")
@@ -105,6 +106,13 @@ const Class = () => {
   async function updateClass(e) {
     e.preventDefault()
     setloading(true)
+    if (boardID!=prevboardID) {
+      //Delete board id from current board
+      await boardService.deleteCassID(prevboardID,updateClassObj.classID)
+      //Add Board ID in new baord
+      await boardService.appendClassIDToBoard(boardID,updateClassObj.classID)
+
+    }
     var classObj = {
       "boardID": boardID,
       "name": className,
@@ -119,6 +127,7 @@ const Class = () => {
         loadfreeClasses()
         setloading(false)
         setmodal(false)
+        setprevboardID("")
 
       }
     })
@@ -297,6 +306,7 @@ const Class = () => {
                   setclassName(cl.name)
                   setclassPrice(cl.price)
                   setboardID(cl.boardID)
+                  setprevboardID(cl.boardID)
                   setupdateClassObj(cl)
                   setmodal(true);
                 }} style={{ cursor: "pointer" }}></i>

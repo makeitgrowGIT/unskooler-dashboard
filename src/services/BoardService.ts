@@ -19,8 +19,13 @@ export class BoardService{
         return boards;
     }
 
-    public appendClassIDToBoard(boardID: string, classID:string){
-    this.boardDB.doc(boardID).update({classIDs: firebase.firestore.FieldValue.arrayUnion(classID)})
+    public async appendClassIDToBoard(boardID: string, classID:string){
+        try {
+            await this.boardDB.doc(boardID).update({classIDs: firebase.firestore.FieldValue.arrayUnion(classID)})
+            return { "success": true, "message": "Class Appended" }
+        } catch (error) {
+            return { "success": false, "message": "Unable to Append class: " + error }
+        }
     }
 
     public async deleteCassID(boardID:string, classID: string){
