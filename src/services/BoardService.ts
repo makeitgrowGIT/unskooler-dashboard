@@ -33,6 +33,7 @@ export class BoardService{
             await this.boardDB.doc(boardID).update({"classIDs": firebase.firestore.FieldValue.arrayRemove(classID) })
             return { "success": true, "message": "Class deleted" }
         } catch (error) {
+            console.log("Unable to delete class: " + error +"Board ID: "+boardID)
             return { "success": false, "message": "Unable to delete class: " + error }
         }
 

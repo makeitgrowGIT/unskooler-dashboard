@@ -106,9 +106,10 @@ const Class = () => {
   async function updateClass(e) {
     e.preventDefault()
     setloading(true)
-    if (boardID!=prevboardID) {
+    if (boardID!=updateClassObj.boardID) {
+      console.log(boardID,updateClassObj.boardID)
       //Delete board id from current board
-      await boardService.deleteCassID(prevboardID,updateClassObj.classID)
+      await boardService.deleteCassID(updateClassObj.boardID,updateClassObj.classID)
       //Add Board ID in new baord
       await boardService.appendClassIDToBoard(boardID,updateClassObj.classID)
 
