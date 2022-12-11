@@ -6,7 +6,7 @@ body{
     display: none;
     width: 80%;
     margin: auto;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 
 .coursePath{
@@ -21,13 +21,14 @@ body{
     padding-top: 0.5rem;
    
 }
-
 .cbseSection{
     margin-top:1rem ;
     overflow-x: auto;
+    scrollbar-color: #b1baf5 #dcdee000;
+    scrollbar-width: auto;
+  
     /* overflow-y: hidden; */
     /* -ms-overflow-style: none;  Internet Explorer 10+ */
-    scrollbar-width: none;  
     /* border: 1px solid red; */
 }
 .cbseSection::-webkit-scrollbar { 

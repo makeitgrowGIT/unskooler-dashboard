@@ -10,10 +10,11 @@ export interface Module {
     isFree:            boolean;
     index:             number;
     name:              string;
-    pdfURL:            string;
     videoURL:          string;
     moduleID:          string;
     thumbnailURL:      string;
+    assignments:       string[];
+    notes:             string[];
 }
 
 // Converts JSON strings to/from your types

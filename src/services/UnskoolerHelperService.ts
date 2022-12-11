@@ -23,11 +23,30 @@ export class UnskoolerHelperService {
         }
     }
 
+    async deleteByURl(url: string){
+        try {
+            var firebaseStorageRef = storage.refFromURL(url);
+            console.log("Deleting: "+firebaseStorageRef.name);
+            await firebaseStorageRef.delete()
+            console.log("Deleted: "+firebaseStorageRef.name);
+            return { "success": true, "message": "File Uploaded ", "object": url }
+        } catch (error) {
+            
+        }
+    }
+
     async uploadFileWithPercent(file: File, setloadingMessageFunction: any, setUrlFunction: any, setErrorFunction:  any, complitionFunction: Function ) {
         //This Method will upload given file and set
         try {
+            console.log("File: ")
+            console.log(file)
+            if (!file) {
+                console.log("No Video URL here")
+                setUrlFunction("")
+                        complitionFunction("")
+                        return
+            }
             const storageRef = ref(storage, "largeFiles/" + file.name);
-
             const uploadTask = uploadBytesResumable(storageRef, file);
             return  uploadTask.on('state_changed',
                 (snapshot) => {

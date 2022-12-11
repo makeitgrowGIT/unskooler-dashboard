@@ -160,7 +160,9 @@ const Module = () => {
       console.log(duration)
       setvideoDuration(duration)
     }
-    video.src = URL.createObjectURL(videoFile);
+    if (videoFile) {
+      video.src = URL.createObjectURL(videoFile);
+    }
 
 
 
@@ -425,7 +427,6 @@ const Module = () => {
                       placeholder="Enter name"
                       style={{ "marginBottom": "20px" }}
                       accept="video/mp4,video/x-m4v,video/*"
-                      required
                       defaultValue={null}
                       onChange={(e) => { readURLFilePath(e, setvideoPath, setvideoFile) }}
                     ></input>
@@ -450,9 +451,14 @@ const Module = () => {
                   chapterService.deleteModuleID(deleteObj.chapterID, deleteObj.moduleID).then((res) => {
 
                     moduleService.deleteModule(deleteObj.moduleID).then((res) => {
-                      setloading(false)
-                      setdeleteModal(false)
-                      initialLoad()
+                      if(res.success){
+                        setloading(false)
+                        setdeleteModal(false)
+                        initialLoad()
+                      }
+                      else{
+                        alert("unable to delete: "+res.message)
+                      }
                     })
                   })
                 }
@@ -532,6 +538,8 @@ const Module = () => {
 
       <div className="subjectColumn">
         {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1, s2) => { return s1.index - s2.index }).map((md) => {
+          console.log("Module:");
+          console.log(md);
           return <div className="item">
             <div className="chapterNameMargin">
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>

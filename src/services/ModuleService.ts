@@ -2,13 +2,14 @@ import firebase from "firebase/compat";
 import { db } from "../firebaseConfig";
 import { Convert } from "../models/Module";
 import { Module } from "../models/Module";
+import { UnskoolerHelperService } from "./UnskoolerHelperService";
 
 
-export class ModuleService{
+export class ModuleService {
     moduleDb = db.collection("modules");
 
-    public async getAllModules (){
-        var modules: Array<Module> =[];
+    public async getAllModules() {
+        var modules: Array<Module> = [];
         //console.log("Retrivig Classes from Db for: ");
         var snapschots = await this.moduleDb.get();
         //console.log(snapschots.docs);
@@ -19,17 +20,31 @@ export class ModuleService{
         return modules;
     }
 
-    public async addNewModue(module:Module) {
+    public async addNewModue(module: Module) {
         try {
-            var doc  =  await this.moduleDb.doc(module.moduleID).set(module);
+            var doc = await this.moduleDb.doc(module.moduleID).set(module);
             return { "success": true, "message": "class added" }
         } catch (error) {
             console.log(error)
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
-    public async deleteModule(moduleID: string){
+    public async deleteModule(moduleID: string) {
         try {
+            var moduleDoc = await this.moduleDb.doc(moduleID).get()
+            var modeule = Convert.toModule(JSON.stringify(moduleDoc.data()))
+            //Delete Video
+            let unskService = new UnskoolerHelperService()
+            await unskService.deleteByURl(modeule.videoURL);
+            
+            //Delete notes
+            modeule.notes.forEach( async element=> {
+                await unskService.deleteByURl(element)
+            });
+            //Delete Assignments
+            modeule.assignments.forEach( async element=> {
+                await unskService.deleteByURl(element)
+            });
             await this.moduleDb.doc(moduleID).delete()
             return { "success": true, "message": "Chapter deleted" }
         } catch (error) {
@@ -37,9 +52,9 @@ export class ModuleService{
         }
 
     }
-    public async deleteArrayEnry(moduleID: string,enrty:string, arrayName1: string){
+    public async deleteArrayEnry(moduleID: string, enrty: string, arrayName1: string) {
         try {
-            await  this.moduleDb.doc(moduleID).update({[arrayName1] : firebase.firestore.FieldValue.arrayRemove(enrty) })
+            await this.moduleDb.doc(moduleID).update({ [arrayName1]: firebase.firestore.FieldValue.arrayRemove(enrty) })
             return { "success": true, "message": " deleted" }
         } catch (error) {
             return { "success": false, "message": "Unable to delete Chapter: " + error }
