@@ -101,15 +101,12 @@ const Module = () => {
     //Add search tags
     await classService.addSearchTags(searcgTags)
     await chapterService.addModuleID(chapterID, module_id)
-    //Upload thumbnail
-    setloadingMessage("Uploading Thumbnail...")
-    let thmbURL = await unskService.uploadFile(imageFile,module_id)
-
 
     //For Notes:
     let notesURL = []
     let c = 0
     notesFiles.forEach(async (element) => {
+      console.log("Uploading Notes")
       if (element) {
         setloadingMessage(`Uploading Notes ${c + 1}/${notesFiles.length}`)
         let pdfURLA = await unskService.uploadFile(element,element.name)
@@ -122,12 +119,14 @@ const Module = () => {
         }
       }
     });
+    console.log("Notes URLs: ")
     console.log(notesURL)
 
     //For Assignments:
     let assigmentUrls = []
     let ca = 0
     assignmetFiles.forEach(async (element) => {
+      console.log("Uploading Assignments")
       if (element) {
         setloadingMessage(`Uploading Assignemnets ${ca + 1}/${notesFiles.length}`)
         let pdfURLA = await unskService.uploadFile(element,element.name)
@@ -140,7 +139,13 @@ const Module = () => {
         }
       }
     });
+    console.log("Assignments URLs: ")
     console.log(assigmentUrls)
+
+    //Upload thumbnail
+    setloadingMessage("Uploading Thumbnail...")
+    let thmbURL = await unskService.uploadFile(imageFile,module_id)
+
 
     var duration = 0;
     var video = document.createElement('video');
@@ -187,6 +192,7 @@ const Module = () => {
         "assignments": assigmentUrls,
         "videoURL": downloadURl
       }
+      console.log("Module Before Upload: ")
       console.log(moduleObj)
       moduleService.addNewModue(moduleObj).then(() => {
 
@@ -472,9 +478,9 @@ const Module = () => {
               overflowY: 'auto'
             }}>
               <div style={{ "padding": "20px" }}>
-                <video width="720" controls>
+                { focusedModuleObj.videoURL.length>1? <video width="720" controls>
                   <source src={focusedModuleObj ? focusedModuleObj.videoURL : null}></source>
-                </video>
+                </video>:<h3>No Video Available</h3>}
                 <hr />
                 <h5>Assignments</h5>
                 <div>
@@ -538,8 +544,8 @@ const Module = () => {
 
       <div className="subjectColumn">
         {modules.filter((val) => { return id == "all" ? true : val.chapterId === id }).sort((s1, s2) => { return s1.index - s2.index }).map((md) => {
-          console.log("Module:");
-          console.log(md);
+          // console.log("Module:");
+          // console.log(md);
           return <div className="item">
             <div className="chapterNameMargin">
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>

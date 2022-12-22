@@ -14,7 +14,7 @@ export class UnskoolerHelperService {
             var res = await uploadBytes(firebaseStorageRef, file)
             var pathRef = storage.ref(uploadname)
             var url = await pathRef.getDownloadURL();
-            console.log("Url: ");
+            console.log("Upload Files Url: ");
             console.log(url);
             return { "success": true, "message": "File Uploaded ", "object": url }
         } catch (error) {
@@ -44,7 +44,7 @@ export class UnskoolerHelperService {
                 console.log("No Video URL here")
                 setUrlFunction("")
                         complitionFunction("")
-                        return
+                        return ""
             }
             const storageRef = ref(storage, "largeFiles/" + file.name);
             const uploadTask = uploadBytesResumable(storageRef, file);
@@ -96,6 +96,7 @@ export class UnskoolerHelperService {
         } catch (error) {
             console.log("Upload Error: "+file.name)
             console.log("Upload Error: "+error)
+            setErrorFunction("Upload Error: "+error)
             return { "success": false, "message": "Unable to add class: " + error }
         }
     }
