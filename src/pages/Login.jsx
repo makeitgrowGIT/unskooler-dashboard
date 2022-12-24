@@ -35,9 +35,10 @@ function Login() {
     const loginService = new LoginService();
     let result  =  await loginService.verifyAdmin(username,password);
     console.log(result)
-    if (result) {
+    if (result.result) {
       localStorage.setItem("username",username)
       localStorage.setItem("loggedIn",true)
+      localStorage.setItem("role",result.role)
       if (remember) {
         localStorage.setItem("remember",true)
       }

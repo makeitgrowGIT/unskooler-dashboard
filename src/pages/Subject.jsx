@@ -30,6 +30,7 @@ const Subject = () => {
   const [deleteObj, setdeleteObj] = useState(null)
   const [deleteModal, setdeleteModal] = useState(false)
   let { id } = useParams();
+  const role = localStorage.getItem("role")
   const subjectService = new SubjectService();
   var boardService = new BoardService();
   var classService = new ClassService();
@@ -266,7 +267,7 @@ const Subject = () => {
               Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
               <Button onClick={() => {
                 setloading(true)
-                if (deleteObj) {
+                if (deleteObj && role=="admin") {
                   classService.deleteSubjectID(deleteObj.classID, deleteObj.subjectID).then((res) => {
 
                     subjectService.deleteSubject(deleteObj.subjectID).then((res) => {
@@ -275,6 +276,9 @@ const Subject = () => {
                       loadSubjects()
                     })
                   })
+                }
+                else{
+                  alert("You are not authorized to perform this operation")
                 }
               }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
             </ModalBody>

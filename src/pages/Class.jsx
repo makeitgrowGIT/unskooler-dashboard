@@ -29,6 +29,7 @@ const Class = () => {
   const [updateClassObj, setupdateClassObj] = useState(null)
   const [deleteObj, setdeleteObj] = useState(null)
   const [deleteModal, setdeleteModal] = useState(false)
+  const role = localStorage.getItem("role")
 
   function loadICSEClasses() {
     classService.getClassByBoardID("ICSE").then((docs) => {
@@ -275,7 +276,7 @@ const Class = () => {
               Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
               <Button onClick={() => {
                 setloading(true)
-                if (deleteObj) {
+                if (deleteObj && role=="admin") {
                   boardService.deleteCassID(deleteObj.boardID, deleteObj.classID).then((res) => {
 
                     classService.deleteClass(deleteObj.classID).then((res) => {
@@ -286,6 +287,9 @@ const Class = () => {
                       loadfreeClasses()
                     })
                   })
+                }
+                else{
+                  alert("You are not authorized to perform this operation")
                 }
               }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
             </ModalBody>

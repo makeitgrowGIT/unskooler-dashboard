@@ -61,6 +61,7 @@ const Module = () => {
   const classService = new ClassService()
   const boardService = new BoardService()
   const subjectService = new SubjectService()
+  const role = localStorage.getItem("role")
 
   function initialLoad() {
     chapterService.getAllChapters().then((chs) => {
@@ -453,7 +454,7 @@ const Module = () => {
               Are you sure you want to delete {deleteObj ? deleteObj.name : ""}?<br></br>
               <Button onClick={() => {
                 setloading(true)
-                if (deleteObj) {
+                if (deleteObj && role=="admin") {
                   chapterService.deleteModuleID(deleteObj.chapterID, deleteObj.moduleID).then((res) => {
 
                     moduleService.deleteModule(deleteObj.moduleID).then((res) => {
@@ -467,6 +468,9 @@ const Module = () => {
                       }
                     })
                   })
+                }
+                else{
+                  alert("You are not authorized to perform this operation")
                 }
               }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
             </ModalBody>
