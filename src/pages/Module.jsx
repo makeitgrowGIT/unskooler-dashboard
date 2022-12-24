@@ -478,9 +478,9 @@ const Module = () => {
               overflowY: 'auto'
             }}>
               <div style={{ "padding": "20px" }}>
-                { focusedModuleObj.videoURL.length>1? <video width="720" controls>
+                { focusedModuleObj? focusedModuleObj["videoURL"].length>1?<video width="720" controls>
                   <source src={focusedModuleObj ? focusedModuleObj.videoURL : null}></source>
-                </video>:<h3>No Video Available</h3>}
+                </video>:<h3>No Video Available</h3>:<h3>No Video Available</h3>}
                 <hr />
                 <h5>Assignments</h5>
                 <div>
