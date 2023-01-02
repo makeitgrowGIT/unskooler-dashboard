@@ -108,7 +108,6 @@ const Class = () => {
     e.preventDefault()
     setloading(true)
     if (boardID!=updateClassObj.boardID) {
-      console.log(boardID,updateClassObj.boardID)
       //Delete board id from current board
       await boardService.deleteCassID(updateClassObj.boardID,updateClassObj.classID)
       //Add Board ID in new baord
@@ -137,11 +136,11 @@ const Class = () => {
 
   function submitForm(e) {
     if (mode == "submit") {
-      console.log("Submitting")
+      console.log("Submitting Class")
       addClass(e)
     }
     else {
-      console.log("Updating")
+      console.log("Updating Class")
       updateClass(e)
     }
   }
@@ -177,7 +176,6 @@ const Class = () => {
 
   }
   function updateFeatured(classID, value) {
-    console.log(value)
     if (value) {
       //If Value Tru
       //Update class with feature false

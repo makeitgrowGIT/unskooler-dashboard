@@ -43,6 +43,8 @@ const Chapter = () => {
       setinstuctor(ins)
     })
     chapterService.getAllChapters().then((chs) => {
+      console.log("Chapters: ")
+      console.log(chs)
       setchapters(chs);
     })
     boardService.getAllBoards().then((ins) => {
@@ -266,6 +268,8 @@ const Chapter = () => {
 
       <div className="subjectColumn">
         {chapters.filter((val) => { return id == "all" ? true : val.subjectID === id }).sort((s1,s2)=>{return s1.index-s2.index}).map((ch) => {
+          console.log("filter chapter")
+          console.log(ch);
           return <div className="item">
             <div className="chapterNameMargin">
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>

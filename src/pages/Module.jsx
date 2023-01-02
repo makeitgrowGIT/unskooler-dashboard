@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, CloseButton, Modal, ModalBody, ModalFooter, ModalHeader, Row, Toast, ToastBody } from "reactstrap";
+import { Button, Card, CloseButton, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Toast, ToastBody } from "reactstrap";
 import '../pages/module.css'
 import { BoardService } from "../services/BoardService";
 import { ChapterService } from "../services/ChapterService";
@@ -106,11 +106,12 @@ const Module = () => {
     //For Notes:
     let notesURL = []
     let c = 0
-    notesFiles.forEach(async (element) => {
-      console.log("Uploading Notes")
-      if (element) {
+    for(const notesFile of notesFiles){
+      
+      console.log("Uploading Assignments")
+      if (notesFile) {
         setloadingMessage(`Uploading Notes ${c + 1}/${notesFiles.length}`)
-        let pdfURLA = await unskService.uploadFile(element,element.name)
+        let pdfURLA = await unskService.uploadFile(notesFile,notesFiles.name)
         c++
         if (pdfURLA.success) {
           notesURL.push(pdfURLA.object)
@@ -119,18 +120,33 @@ const Module = () => {
           alert(pdfURLA.message)
         }
       }
-    });
+    }
+    // notesFiles.forEach(async (element) => {
+    //   console.log("Uploading Notes")
+    //   if (element) {
+    //     setloadingMessage(`Uploading Notes ${c + 1}/${notesFiles.length}`)
+    //     let pdfURLA = await unskService.uploadFile(element,element.name)
+    //     c++
+    //     if (pdfURLA.success) {
+    //       notesURL.push(pdfURLA.object)
+    //     }
+    //     else {
+    //       alert(pdfURLA.message)
+    //     }
+    //   }
+    // });
     console.log("Notes URLs: ")
     console.log(notesURL)
 
     //For Assignments:
     let assigmentUrls = []
     let ca = 0
-    assignmetFiles.forEach(async (element) => {
+    for(const assignmetFile of assignmetFiles){
+      
       console.log("Uploading Assignments")
-      if (element) {
-        setloadingMessage(`Uploading Assignemnets ${ca + 1}/${notesFiles.length}`)
-        let pdfURLA = await unskService.uploadFile(element,element.name)
+      if (assignmetFile) {
+        setloadingMessage(`Uploading Assignments ${ca + 1}/${assignmetFiles.length}`)
+        let pdfURLA = await unskService.uploadFile(assignmetFile,assignmetFile.name)
         ca++
         if (pdfURLA.success) {
           assigmentUrls.push(pdfURLA.object)
@@ -139,7 +155,21 @@ const Module = () => {
           alert(pdfURLA.message)
         }
       }
-    });
+    }
+    //  assignmetFiles.forEach(async (element) => {
+    //   console.log("Uploading Assignments")
+    //   if (element) {
+    //     setloadingMessage(`Uploading Assignemnets ${ca + 1}/${notesFiles.length}`)
+    //     let pdfURLA = await unskService.uploadFile(element,element.name)
+    //     ca++
+    //     if (pdfURLA.success) {
+    //       assigmentUrls.push(pdfURLA.object)
+    //     }
+    //     else {
+    //       alert(pdfURLA.message)
+    //     }
+    //   }
+    // });
     console.log("Assignments URLs: ")
     console.log(assigmentUrls)
 
@@ -256,7 +286,7 @@ const Module = () => {
         <div>
           <Modal size="lg" isOpen={modal} toggle={() => setmodal(!modal)}>
             <ModalHeader toggle={() => setmodal(!modal)}>
-              Add Module
+              {loading?loadingMessage:"Add Module"}
             </ModalHeader>
             <ModalBody style={{
               maxHeight: 'calc(100vh - 210px)',
