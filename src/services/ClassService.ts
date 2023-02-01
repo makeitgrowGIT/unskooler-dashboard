@@ -29,6 +29,10 @@ export class ClassService {
         });
         return classes;
     }
+    public async getClassByID(classID: string){
+        let cl = await this.classDB.doc(classID).get();
+        return cl.data()
+    }
 
     public async addNewClass(grade: Class) {
         try {

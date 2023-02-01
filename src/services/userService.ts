@@ -17,4 +17,10 @@ export class UserService{
         });
         return users;
     }
+    public async  getUserByUID (uid: string){
+        //console.log("Retrivig Subjects from Db ");
+        var user = await this.userDb.doc(uid).get();
+        //console.log(snapschots.docs);
+        return user.data();
+    }
 }

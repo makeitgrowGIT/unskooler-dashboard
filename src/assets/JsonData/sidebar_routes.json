@@ -22,11 +22,16 @@
     {
         "display_name": "Instructors",
         "route": "/instructors",
-        "icon": "bx bx-package"
+        "icon": "bx bx-male"
     },
     {
         "display_name": "Users",
         "route": "/users",
+        "icon": "bx bx-user"
+    },
+    {
+        "display_name": "Subscriptions",
+        "route": "/subscriptions",
         "icon": "bx bx-cart"
     }
 ]

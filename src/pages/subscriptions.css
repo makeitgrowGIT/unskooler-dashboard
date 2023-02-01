@@ -1,0 +1,36 @@
+.Subscriptions{
+    width: 82vw;
+    user-select: none;
+
+}
+.subHolder{
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.subCard{
+    margin: 20px;
+    width: 350px;
+    padding: 25px;
+    background-color: rgb(208, 233, 255);
+    border-radius: 25px;
+    box-shadow: 10px 10px 10px rgba(177, 177, 177, 0.655);
+    transition: 200ms ease-in-out;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    justify-content: center;
+}
+.subCard:hover{
+    box-shadow: 20px 20px 30px rgba(177, 177, 177, 0.389);
+}
+
+.subThumbnail{
+    width: 300px;
+    height: 192px;
+    border-radius: 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid blue;
+    margin-bottom: 20px;
+}

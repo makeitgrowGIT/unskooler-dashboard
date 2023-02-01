@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 
 import { Link } from 'react-router-dom'
+import { SubscriptionService } from "../services/SubscriptionService";
 const Subject = () => {
   const [modal, setmodal] = useState(false);
   const [subjects, setsubjects] = useState([]);
@@ -29,15 +30,26 @@ const Subject = () => {
   const [allClasses, setallClasses] = useState(["tets"])
   const [deleteObj, setdeleteObj] = useState(null)
   const [deleteModal, setdeleteModal] = useState(false)
+  const [newSubject, setnewSubject] = useState(false)
+  const [oldSelectedSubject, setoldSelectedSubject] = useState(null)
+  const [openedClass, setopenedClass] = useState({"subjectIDs":[]})
+  const [subCount, setSubCount] = useState(0)
   let { id } = useParams();
   const role = localStorage.getItem("role")
   const subjectService = new SubjectService();
   var boardService = new BoardService();
   var classService = new ClassService();
-  function loadSubjects() {
+  var subscriptionService = new SubscriptionService();
+  async function loadSubjects() {
     subjectService.getAllSubjects().then((subs) => {
       setsubjects(subs);
     })
+    if (id != "all") {
+      var c = await subscriptionService.getSubscriptionsForClass(id)
+      console.log("SubCount")
+      console.log(c)
+      setSubCount(c)
+    }
   }
 
   useEffect(() => {
@@ -78,6 +90,11 @@ const Subject = () => {
       console.log("board")
       console.log(board.boardID)
       var tempC_Claases = await classService.getClassByBoardID(board.boardID)
+      if (id!="all") {
+        console.log("id "+id)
+        var opClass = await classService.getClassByID(id)
+        setopenedClass(opClass)
+      }
       allClass = allClass.concat(tempC_Claases)
       temp_mapping.set(board.boardID, tempC_Claases)
 
@@ -104,7 +121,7 @@ const Subject = () => {
     await classService.addSubjectID(classID, subjectID)
     //Upload Thumbnail
     var unsService = new UnskoolerHelperService()
-    var responseObj = await unsService.uploadFile(imageFile,subjectID)
+    var responseObj = await unsService.uploadFile(imageFile, subjectID)
     if (responseObj.success) {
       //Create Subject class
       var SubjectObj = {
@@ -127,6 +144,8 @@ const Subject = () => {
         setclassID("")
         setimageFile(null)
         setboardID("CBSE")
+        setoldSelectedSubject(null)
+        setnewSubject(false)
       })
     }
     else {
@@ -157,16 +176,30 @@ const Subject = () => {
         setclassID("")
         setimageFile(null)
         setboardID("CBSE")
+        setoldSelectedSubject(null)
+        setnewSubject(false)
 
       }
     })
 
   }
+  function addOldSubject(){
+
+    var subJectID = oldSelectedSubject["subjectID"]  
+    classService.addSubjectID(id, subJectID).then(()=>{
+      console.log(id,subJectID)
+    })
+  }
 
   function submitForm(e) {
     if (mode == "submit") {
       console.log("Submitting")
-      addSubject(e)
+      if (newSubject) {
+        addSubject(e)
+      }else{
+        e.preventDefault()
+        addOldSubject()
+      }
     }
     else {
       console.log("Updating")
@@ -188,7 +221,11 @@ const Subject = () => {
             </ModalHeader>
             <ModalBody>
               <form onSubmit={submitForm}>
-                <Row>
+                <div style={{ "display": "flex", "alignItems": "center", "flexDirection": "row", "width": "100%", "justifyContent": "space-between" }}>
+                  New Subject?
+                  <input type="checkbox" onChange={(e) => { setnewSubject(e.target.checked) }} />
+                </div>
+                {newSubject ?<Row>
                   <div>
                     <label htmlFor="name">Subject name</label>
                     <input
@@ -253,21 +290,26 @@ const Subject = () => {
                       {classes.size > 0 ? classes.get(classboardID).map((br) => { return <option value={br.classID} >{br.name}({br.subjectIDs.length} Courses)</option> }) : ""}
                     </select>
                   </div><br />
-                </Row><br /><br />
+                </Row>: <Row>
+                  <select onChange={(e)=>{setoldSelectedSubject(JSON.parse( e.target.value))}}
+                      className="form-control">
+                    {subjects.map((sub)=><option value={JSON.stringify(sub)}>{sub.summary}</option>)}
+                  </select>
+                  </Row>}<br /><br /> 
                 <button className={loading ? "addInstructor-loading" : "addInstructor"} type="submit">{loading ? <i class='bx bx-loader bx-spin'></i> : mode == "submit" ? "Sumbit" : "Update"}</button>
               </form>
             </ModalBody>
           </Modal>
-          
+
           <Modal isOpen={deleteModal} toggle={() => setdeleteModal(!deleteModal)}>
             <ModalHeader toggle={() => setdeleteModal(false)}>
               Delete Subject
             </ModalHeader>
             <ModalBody>
-              Are you sure you want to delete {deleteObj?deleteObj.name:""}?<br></br>
+              Are you sure you want to delete {deleteObj ? deleteObj.name : ""}?<br></br>
               <Button onClick={() => {
                 setloading(true)
-                if (deleteObj && role=="admin") {
+                if (deleteObj && role == "admin") {
                   classService.deleteSubjectID(deleteObj.classID, deleteObj.subjectID).then((res) => {
 
                     subjectService.deleteSubject(deleteObj.subjectID).then((res) => {
@@ -277,7 +319,7 @@ const Subject = () => {
                     })
                   })
                 }
-                else{
+                else {
                   alert("You are not authorized to perform this operation")
                 }
               }}>Yes</Button> <Button onClick={() => { setdeleteModal(false) }}>No</Button>
@@ -288,9 +330,10 @@ const Subject = () => {
           </button>
         </div>
       </div>
+      <div style={{ "margin-left": "2vw", "display": "flex", "flexDirection": "row", "color": "gray", }}><h6 style={id != "all" ? { "display": "block" } : { "display": "none" }}>All Subscribers: {subCount}</h6></div><hr />
 
       <div className="subjectColumn">
-        {subjects.filter((val) => { console.log("id"); console.log(id); return id == "all" ? true : val.classID === id }).map((sub) => {
+        {subjects.filter((val) => { return id == "all" ? true : openedClass.subjectIDs.includes(val.subjectID)  }).map((sub) => {
           return <div className="item">
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
               <div className="chapterNameMargin">
@@ -307,9 +350,9 @@ const Subject = () => {
                 setupdateSubjectID(sub.subjectID)
               }} style={{ cursor: "pointer" }}></i>
               <i class='bx bxs-trash' onClick={async () => {
-                  setdeleteModal(true);
-                  setdeleteObj(sub)
-                }} style={{ cursor: "pointer" }}></i>
+                setdeleteModal(true);
+                setdeleteObj(sub)
+              }} style={{ cursor: "pointer" }}></i>
             </div>
             <div className="chapterNameMargin" style={{ marginBottom: '0px', fontSize: "0.5rem" }}>
               <h6>{sub.summary}</h6>

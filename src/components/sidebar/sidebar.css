@@ -6,10 +6,17 @@
     top: 0;
     background-color: var(--main-bg);
     box-shadow: var(--box-shadow);
+    overflow: auto;
+}
+.sidebar::-webkit-scrollbar-thumb{
+    color: aqua;
+    background-color: rgba(255, 0, 0, 0.249);
+    border-radius: 0px;
+    width: 1px;
 }
 
 .sidebar__logo {
-    height: 150px;
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,7 +27,7 @@
 }
 
 .sidebar__item {
-    padding: 0 20px;
+    padding: 0 10px;
     color: black!important;
 }
 
@@ -47,10 +54,11 @@
 
 .sidebar__item-inner.active {
     border-radius: var(--border-radius);
+    height: 100%;
     background-image: linear-gradient(
         to right,
         var(--main-color),
-        var(--second-color)
+        rgb(54, 37, 240)
     );
     color: var(--txt-white);
 }

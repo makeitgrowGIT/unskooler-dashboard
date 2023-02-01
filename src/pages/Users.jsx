@@ -72,8 +72,12 @@ const Customers = () => {
       <h1 className="warning">This site is not compatible with mobile devices please open in Desktop mode</h1>
     </div>
       <h2 className="userPageHeading">
-        View Student Details
+        User Details
       </h2>
+      <h5 className="userPageHeading" style={{"fontSize":18,"color":"gray"}}>
+        {users.length} Users
+      </h5>
+      <hr/>
       <div className='userTable'>
         <DataTable
           columns={columns}

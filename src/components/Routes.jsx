@@ -13,6 +13,7 @@ import Instructors from '../pages/Instructors'
 import Users from '../pages/Users'
 import Financials from '../pages/Financials'
 import Settings from '../pages/Settings'
+import Subscriptions from '../pages/Subscriptions'
 
 const Routes = () => {
     return (
@@ -27,6 +28,7 @@ const Routes = () => {
             <Route path='/instructors' component={Instructors}/>
             <Route path='/users' component={Users}/>
             <Route path='/financials' component={Financials}/>
+            <Route path='/subscriptions' component={Subscriptions}/>
 
             {/* <Route path='/settings' component={Settings}/> */}
         </Switch>

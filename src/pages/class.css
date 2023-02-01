@@ -64,17 +64,16 @@ body{
 .wrapper{
     display: flex;
     margin-left: 2rem;
-    min-width: 80vw;
-    max-width: 80vw;
+    min-width: 78vw;
+    max-width: 78vw;
     /* overflow-y: hidden; */
 }
 
 .wrapper .item{
     min-width: 17vw;
-    padding: 1vw;
+    padding: 16px;
     margin-left: 10vh;
     margin-bottom: 10vh;
-    height: 33vh;
     background: #e7eafc;
     box-shadow: 0px 8px 16px rgba(143, 149, 178, 0.15);
     border-radius: 16px;
